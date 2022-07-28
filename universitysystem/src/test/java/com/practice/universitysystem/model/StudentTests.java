@@ -10,15 +10,17 @@ import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
-public class StudentTests {
+class StudentTests {
 
     @Autowired
     StudentRepository studentRepository;
 
     @Test
     @Transactional
-    void createStudent() throws ParseException {
+    void createAndDeleteStudent() throws ParseException {
         Student student = new Student();
         student.setName("TEST_USER_NAME");
         student.setLastName("TEST_USER_LAST_NAME");
@@ -31,30 +33,11 @@ public class StudentTests {
 
         studentRepository.save(student);
 
-        Assertions.assertTrue(studentRepository.count() > 0);
-
-    }
-
-    @Test
-    @Transactional
-    void deleteStudent() throws ParseException {
-        Student student = new Student();
-        student.setName("TEST_USER_NAME");
-        student.setLastName("TEST_USER_LAST_NAME");
-        student.setGovernmentId("1234567890");
-        student.setEmail("test@testmail.com");
-        student.setMobilePhone("1234567896");
-        student.setLandPhone("1234567896");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        student.setBirthdate(dateFormat.parse("14-05-2000"));
-
-        studentRepository.save(student);
-
-        Assertions.assertEquals(1, studentRepository.count());
+        assertEquals(1, studentRepository.count());
 
         studentRepository.delete(student);
 
-        Assertions.assertEquals(0, studentRepository.count());
+        assertEquals(0, studentRepository.count());
 
     }
 }

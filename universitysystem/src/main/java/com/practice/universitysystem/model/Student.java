@@ -1,13 +1,15 @@
 package com.practice.universitysystem.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Data
-@PrimaryKeyJoinColumn(name = "userId")
+@EqualsAndHashCode(callSuper = true)
+@PrimaryKeyJoinColumn(name = "studentUserId")
 public class Student extends UniversityUser {
 
     @Temporal(TemporalType.DATE)
