@@ -1,5 +1,6 @@
 package com.practice.universitysystem.model;
 
+import com.practice.universitysystem.model.studentsubject.StudentSubjectRegistration;
 import com.practice.universitysystem.repository.StudentRepository;
 import com.practice.universitysystem.repository.StudentSubjectRegistrationRepository;
 import com.practice.universitysystem.repository.SubjectRepository;
