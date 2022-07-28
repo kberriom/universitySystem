@@ -12,4 +12,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn(name = "teacherUserId")
 public class Teacher extends UniversityUser {
 
+    //id is a FK from UniversityUser
+
 }

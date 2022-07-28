@@ -3,7 +3,6 @@ package com.practice.universitysystem.model;
 import lombok.Data;
 import org.hibernate.annotations.Check;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;

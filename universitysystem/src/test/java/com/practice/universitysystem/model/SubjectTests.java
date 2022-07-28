@@ -19,7 +19,22 @@ class SubjectTests {
 
     @Test
     @Transactional
-    void createAndDeleteSubject() throws ParseException {
+    void createAndDeleteSubjectTest() throws ParseException {
+        assertEquals(0, subjectRepository.count());
+
+        Subject subject = getSubject();
+
+        subjectRepository.save(subject);
+
+        assertEquals(1, subjectRepository.count());
+
+        subjectRepository.delete(subject);
+
+        assertEquals(0, subjectRepository.count());
+
+    }
+
+    protected static Subject getSubject() throws ParseException {
         Subject subject = new Subject();
         subject.setName("SUBJECT_CLASS_NAME");
         subject.setDescription("CLASS_DESCRIPTION");
@@ -31,15 +46,7 @@ class SubjectTests {
         SimpleDateFormat dateFormatEnd = new SimpleDateFormat("dd-MM-yyyy");
         subject.setEndDate(dateFormatEnd.parse("30-05-2010"));
         subject.setCreditsValue(8);
-
-        subjectRepository.save(subject);
-
-        assertEquals(1, subjectRepository.count());
-
-        subjectRepository.delete(subject);
-
-        assertEquals(0, subjectRepository.count());
-
+        return subject;
     }
 
 }

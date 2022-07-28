@@ -30,6 +30,4 @@ public class Subject {
     @NotNull
     private int creditsValue;
 
-
-
 }
