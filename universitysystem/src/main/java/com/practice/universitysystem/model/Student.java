@@ -1,27 +1,17 @@
 package com.practice.universitysystem.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.Date;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name = "studentId")
-public class Student extends User{
+@PrimaryKeyJoinColumn(name = "userId")
+public class Student extends UniversityUser {
 
-    private String studentId;
+    @Temporal(TemporalType.DATE)
+    private Date enrollmentDate;
 
-    private int currentCredits;
 
-    @OneToOne(mappedBy = "student")
-    private StudentGrade studentGrade;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "student_enrolled_subject",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "studentId"),
-            inverseJoinColumns = @JoinColumn(name = "course_subject_id", referencedColumnName = "courseSubjectId"))
-    private Set<Course> enrolledCourses;
 }
