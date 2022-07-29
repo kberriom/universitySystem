@@ -1,17 +1,22 @@
 package com.practice.universitysystem.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotNull;
+
 
 @Entity
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @PrimaryKeyJoinColumn(name = "teacherUserId")
 public class Teacher extends UniversityUser {
 
     //id is a FK from UniversityUser
+
+    @NotNull
+    private String department;
 
 }
