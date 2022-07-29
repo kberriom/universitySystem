@@ -1,5 +1,6 @@
-package com.practice.universitysystem.model;
+package com.practice.universitysystem.model.users.student;
 
+import com.practice.universitysystem.model.users.UniversityUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

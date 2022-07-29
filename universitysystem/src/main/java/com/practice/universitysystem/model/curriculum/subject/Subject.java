@@ -1,5 +1,6 @@
-package com.practice.universitysystem.model;
+package com.practice.universitysystem.model.curriculum.subject;
 
+import com.practice.universitysystem.model.curriculum.Curriculum;
 import lombok.Data;
 import org.hibernate.annotations.Check;
 

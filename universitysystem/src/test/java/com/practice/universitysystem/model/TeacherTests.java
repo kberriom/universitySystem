@@ -1,9 +1,11 @@
 package com.practice.universitysystem.model;
 
-import com.practice.universitysystem.model.teacher_asignation.TeacherAssignation;
-import com.practice.universitysystem.repository.SubjectRepository;
-import com.practice.universitysystem.repository.TeacherAssignationRepository;
-import com.practice.universitysystem.repository.TeacherRepository;
+import com.practice.universitysystem.model.curriculum.subject.Subject;
+import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignation;
+import com.practice.universitysystem.model.users.teacher.Teacher;
+import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
+import com.practice.universitysystem.repository.users.teacher.teacher_assignation.TeacherAssignationRepository;
+import com.practice.universitysystem.repository.users.teacher.TeacherRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

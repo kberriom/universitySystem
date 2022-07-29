@@ -1,10 +1,13 @@
 package com.practice.universitysystem.model;
 
-import com.practice.universitysystem.model.student_subject.StudentSubjectRegistration;
-import com.practice.universitysystem.repository.GradeRepository;
-import com.practice.universitysystem.repository.StudentRepository;
-import com.practice.universitysystem.repository.StudentSubjectRegistrationRepository;
-import com.practice.universitysystem.repository.SubjectRepository;
+import com.practice.universitysystem.model.curriculum.subject.Grade;
+import com.practice.universitysystem.model.curriculum.subject.Subject;
+import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
+import com.practice.universitysystem.model.users.student.Student;
+import com.practice.universitysystem.repository.curriculum.subject.GradeRepository;
+import com.practice.universitysystem.repository.users.student.StudentRepository;
+import com.practice.universitysystem.repository.users.student.student_subject.StudentSubjectRegistrationRepository;
+import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

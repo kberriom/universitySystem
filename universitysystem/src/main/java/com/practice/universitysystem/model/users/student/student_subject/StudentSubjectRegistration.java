@@ -1,6 +1,6 @@
-package com.practice.universitysystem.model.student_subject;
+package com.practice.universitysystem.model.users.student.student_subject;
 
-import com.practice.universitysystem.model.Grade;
+import com.practice.universitysystem.model.curriculum.subject.Grade;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;

@@ -1,6 +1,6 @@
-package com.practice.universitysystem.model;
+package com.practice.universitysystem.model.curriculum.subject;
 
-import com.practice.universitysystem.model.student_subject.StudentSubjectRegistration;
+import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
 import lombok.Data;
 
 import javax.persistence.*;

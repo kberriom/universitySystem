@@ -1,5 +1,6 @@
-package com.practice.universitysystem.model;
+package com.practice.universitysystem.model.users.teacher;
 
+import com.practice.universitysystem.model.users.UniversityUser;
 import lombok.*;
 
 import javax.persistence.Entity;

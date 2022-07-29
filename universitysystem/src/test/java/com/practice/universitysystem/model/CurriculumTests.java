@@ -1,7 +1,9 @@
 package com.practice.universitysystem.model;
 
-import com.practice.universitysystem.repository.CurriculumRepository;
-import com.practice.universitysystem.repository.SubjectRepository;
+import com.practice.universitysystem.model.curriculum.Curriculum;
+import com.practice.universitysystem.model.curriculum.subject.Subject;
+import com.practice.universitysystem.repository.curriculum.CurriculumRepository;
+import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

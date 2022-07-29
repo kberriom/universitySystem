@@ -1,5 +1,6 @@
-package com.practice.universitysystem.model;
+package com.practice.universitysystem.model.curriculum;
 
+import com.practice.universitysystem.model.curriculum.subject.Subject;
 import lombok.Data;
 
 import javax.persistence.*;

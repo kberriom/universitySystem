@@ -1,4 +1,4 @@
-package com.practice.universitysystem.model.student_subject;
+package com.practice.universitysystem.model.users.student.student_subject;
 
 import lombok.Data;
 

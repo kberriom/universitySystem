@@ -1,4 +1,4 @@
-package com.practice.universitysystem.model.teacher_asignation;
+package com.practice.universitysystem.model.users.teacher.teacher_asignation;
 
 import lombok.Data;
 

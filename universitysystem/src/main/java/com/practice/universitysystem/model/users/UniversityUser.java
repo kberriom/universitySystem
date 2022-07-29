@@ -1,4 +1,4 @@
-package com.practice.universitysystem.model;
+package com.practice.universitysystem.model.users;
 
 import lombok.Data;
 import org.hibernate.annotations.Check;
