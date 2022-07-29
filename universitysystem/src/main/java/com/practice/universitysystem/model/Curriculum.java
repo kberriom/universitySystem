@@ -28,7 +28,7 @@ public class Curriculum {
     @NotNull
     private Date dateEnd;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "curriculum_subjects",
             joinColumns = @JoinColumn(name = "curriculum_id"),

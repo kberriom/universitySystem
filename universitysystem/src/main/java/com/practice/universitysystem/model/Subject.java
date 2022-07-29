@@ -31,7 +31,7 @@ public class Subject {
     @NotNull
     private int creditsValue;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     Set<Curriculum> curriculumsContainingSubject;
 
 }
