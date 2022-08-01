@@ -2,13 +2,19 @@ package com.practice.universitysystem.model;
 
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,12 +24,22 @@ class SubjectTests {
     @Autowired
     SubjectRepository subjectRepository;
 
+    private static Validator validator;
+
+    @BeforeAll
+    public static void validationSetup() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
     @Test
     @Transactional
     void createAndDeleteSubjectTest() throws ParseException {
         assertEquals(0, subjectRepository.count());
 
         Subject subject = getSubject();
+        Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
+        assertEquals(0, constraintViolationsSubject.size());
 
         subjectRepository.save(subject);
 

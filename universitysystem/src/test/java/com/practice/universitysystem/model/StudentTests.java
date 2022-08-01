@@ -8,14 +8,20 @@ import com.practice.universitysystem.repository.curriculum.subject.GradeReposito
 import com.practice.universitysystem.repository.users.student.StudentRepository;
 import com.practice.universitysystem.repository.users.student.student_subject.StudentSubjectRegistrationRepository;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
+import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +38,14 @@ class StudentTests {
     StudentSubjectRegistrationRepository studentSubjectRegistrationRepository;
     @Autowired
     GradeRepository gradeRepository;
+
+    private static Validator validator;
+
+    @BeforeAll
+    public static void validationSetup() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
     protected static Student getStudent() throws ParseException {
         Student student = new Student();
@@ -52,6 +66,8 @@ class StudentTests {
         assertEquals(0, studentRepository.count());
 
         Student student = getStudent();
+        Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
+        assertEquals(0, constraintViolations.size());
 
         studentRepository.save(student);
 
@@ -71,12 +87,18 @@ class StudentTests {
         assertEquals(0, studentSubjectRegistrationRepository.count());
 
         Student student = getStudent();
+        Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
+        assertEquals(0, constraintViolations.size());
         studentRepository.save(student);
 
         Subject subject = getSubject();
+        Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
+        assertEquals(0, constraintViolationsSubject.size());
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
+        Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
+        assertEquals(0, constraintViolationsRegistration.size());
 
         assertFalse(studentSubjectRegistrationRepository.existsById(subjectRegistration.getId()));
 
@@ -95,13 +117,18 @@ class StudentTests {
         assertEquals(0, gradeRepository.count());
 
         Student student = getStudent();
+        Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
+        assertEquals(0, constraintViolations.size());
         studentRepository.save(student);
 
         Subject subject = getSubject();
+        Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
+        assertEquals(0, constraintViolationsSubject.size());
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
-
+        Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
+        assertEquals(0, constraintViolationsRegistration.size());
         assertFalse(studentSubjectRegistrationRepository.existsById(subjectRegistration.getId()));
 
         subjectRegistration.setSubjectGrades(new HashSet<>());
@@ -115,12 +142,16 @@ class StudentTests {
         grade1.setGradeValue(3.5);
         grade1.setPercentageOfFinalGrade(50);
         grade1.setRegistration(subjectRegistration);
+        Set<ConstraintViolation<Grade>> constraintViolationsGrade1 = validator.validate(grade1);
+        assertEquals(0, constraintViolationsGrade1.size());
 
         Grade grade2 = new Grade();
         grade2.setDescription("GRADE_DESCRIPTION");
         grade2.setGradeValue(5);
         grade2.setPercentageOfFinalGrade(50);
         grade2.setRegistration(subjectRegistration);
+        Set<ConstraintViolation<Grade>> constraintViolationsGrade2 = validator.validate(grade2);
+        assertEquals(0, constraintViolationsGrade2.size());
 
         subjectRegistration.getSubjectGrades().add(grade1);
         subjectRegistration.getSubjectGrades().add(grade2);

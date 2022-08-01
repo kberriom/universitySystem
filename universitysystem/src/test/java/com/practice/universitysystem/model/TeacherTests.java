@@ -6,13 +6,16 @@ import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
 import com.practice.universitysystem.repository.users.teacher.teacher_assignation.TeacherAssignationRepository;
 import com.practice.universitysystem.repository.users.teacher.TeacherRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,11 +45,22 @@ class TeacherTests {
     @Autowired
     SubjectRepository subjectRepository;
 
+    private static Validator validator;
+
+    @BeforeAll
+    public static void validationSetup() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
     @Test
     @Transactional
     void createAndDeleteTeacherTest() throws ParseException {
         assertEquals(0, teacherRepository.count());
+
         Teacher teacher = getTeacher();
+        Set<ConstraintViolation<Teacher>> constraintViolations = validator.validate(teacher);
+        assertEquals(0, constraintViolations.size());
 
         teacherRepository.save(teacher);
 
@@ -63,14 +77,19 @@ class TeacherTests {
         assertEquals(0, teacherAssignationRepository.count());
 
         Teacher teacher = getTeacher();
+        Set<ConstraintViolation<Teacher>> constraintViolationsTeacher = validator.validate(teacher);
+        assertEquals(0, constraintViolationsTeacher.size());
         teacherRepository.save(teacher);
 
         Subject subject = getSubject();
+        Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
+        assertEquals(0, constraintViolationsSubject.size());
         subjectRepository.save(subject);
 
         TeacherAssignation assignation = new TeacherAssignation(teacher.getId(), subject.getId());
-
         assignation.setRoleInClass("MAIN_TEACHER");
+        Set<ConstraintViolation<TeacherAssignation>> constraintViolationsAssignation = validator.validate(assignation);
+        assertEquals(0, constraintViolationsAssignation.size());
 
         assertFalse(teacherAssignationRepository.existsById(assignation.getId()));
 

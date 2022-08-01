@@ -4,14 +4,20 @@ import com.practice.universitysystem.model.curriculum.Curriculum;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.repository.curriculum.CurriculumRepository;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
+import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,11 +31,20 @@ class CurriculumTests {
     @Autowired
     SubjectRepository subjectRepository;
 
+    private static Validator validator;
+
+    @BeforeAll
+    public static void validationSetup() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
     @Test
     @Transactional
     void createAndDeleteCurriculum() throws ParseException {
         assertEquals(0, curriculumRepository.count());
         assertEquals(0, subjectRepository.count());
+
         Curriculum curriculum = new Curriculum();
         curriculum.setName("CURRICULUM_NAME");
         curriculum.setDescription("CURRICULUM_DESCRIPTION");
@@ -39,9 +54,13 @@ class CurriculumTests {
         curriculum.setDateEnd(dateFormatEnd.parse("14-05-2001"));
 
         Subject subject1 = getSubject();
+        Set<ConstraintViolation<Subject>> constraintViolationsSubject1 = validator.validate(subject1);
+        assertEquals(0, constraintViolationsSubject1.size());
         subjectRepository.save(subject1);
 
         Subject subject2 = getSubject();
+        Set<ConstraintViolation<Subject>> constraintViolationsSubject2 = validator.validate(subject2);
+        assertEquals(0, constraintViolationsSubject2.size());
         subjectRepository.save(subject2);
 
         assertEquals(2, subjectRepository.count());
@@ -50,6 +69,9 @@ class CurriculumTests {
 
         curriculum.getSubjects().add(subject1);
         curriculum.getSubjects().add(subject2);
+
+        Set<ConstraintViolation<Curriculum>> constraintViolationsCurriculum = validator.validate(curriculum);
+        assertEquals(0, constraintViolationsCurriculum.size());
 
         curriculumRepository.save(curriculum);
 
