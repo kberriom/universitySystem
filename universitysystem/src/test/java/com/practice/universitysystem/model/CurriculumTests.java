@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
@@ -55,12 +52,16 @@ class CurriculumTests {
 
         Subject subject1 = getSubject();
         Set<ConstraintViolation<Subject>> constraintViolationsSubject1 = validator.validate(subject1);
-        assertEquals(0, constraintViolationsSubject1.size());
+        if (!constraintViolationsSubject1.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsSubject1);
+        }
         subjectRepository.save(subject1);
 
         Subject subject2 = getSubject();
         Set<ConstraintViolation<Subject>> constraintViolationsSubject2 = validator.validate(subject2);
-        assertEquals(0, constraintViolationsSubject2.size());
+        if (!constraintViolationsSubject2.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsSubject2);
+        }
         subjectRepository.save(subject2);
 
         assertEquals(2, subjectRepository.count());
@@ -71,7 +72,9 @@ class CurriculumTests {
         curriculum.getSubjects().add(subject2);
 
         Set<ConstraintViolation<Curriculum>> constraintViolationsCurriculum = validator.validate(curriculum);
-        assertEquals(0, constraintViolationsCurriculum.size());
+        if (!constraintViolationsCurriculum.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsCurriculum);
+        }
 
         curriculumRepository.save(curriculum);
 

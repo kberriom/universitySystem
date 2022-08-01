@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
@@ -67,7 +64,9 @@ class StudentTests {
 
         Student student = getStudent();
         Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
-        assertEquals(0, constraintViolations.size());
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
 
         studentRepository.save(student);
 
@@ -88,17 +87,23 @@ class StudentTests {
 
         Student student = getStudent();
         Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
-        assertEquals(0, constraintViolations.size());
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
         studentRepository.save(student);
 
         Subject subject = getSubject();
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
-        assertEquals(0, constraintViolationsSubject.size());
+        if (!constraintViolationsSubject.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsSubject);
+        }
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
         Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
-        assertEquals(0, constraintViolationsRegistration.size());
+        if (!constraintViolationsRegistration.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsRegistration);
+        }
 
         assertFalse(studentSubjectRegistrationRepository.existsById(subjectRegistration.getId()));
 
@@ -118,17 +123,23 @@ class StudentTests {
 
         Student student = getStudent();
         Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
-        assertEquals(0, constraintViolations.size());
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
         studentRepository.save(student);
 
         Subject subject = getSubject();
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
-        assertEquals(0, constraintViolationsSubject.size());
+        if (!constraintViolationsSubject.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsSubject);
+        }
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
         Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
-        assertEquals(0, constraintViolationsRegistration.size());
+        if (!constraintViolationsRegistration.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsRegistration);
+        }
         assertFalse(studentSubjectRegistrationRepository.existsById(subjectRegistration.getId()));
 
         subjectRegistration.setSubjectGrades(new HashSet<>());
@@ -143,7 +154,9 @@ class StudentTests {
         grade1.setPercentageOfFinalGrade(50);
         grade1.setRegistration(subjectRegistration);
         Set<ConstraintViolation<Grade>> constraintViolationsGrade1 = validator.validate(grade1);
-        assertEquals(0, constraintViolationsGrade1.size());
+        if (!constraintViolationsGrade1.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsGrade1);
+        }
 
         Grade grade2 = new Grade();
         grade2.setDescription("GRADE_DESCRIPTION");
@@ -151,7 +164,9 @@ class StudentTests {
         grade2.setPercentageOfFinalGrade(50);
         grade2.setRegistration(subjectRegistration);
         Set<ConstraintViolation<Grade>> constraintViolationsGrade2 = validator.validate(grade2);
-        assertEquals(0, constraintViolationsGrade2.size());
+        if (!constraintViolationsGrade2.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsGrade2);
+        }
 
         subjectRegistration.getSubjectGrades().add(grade1);
         subjectRegistration.getSubjectGrades().add(grade2);

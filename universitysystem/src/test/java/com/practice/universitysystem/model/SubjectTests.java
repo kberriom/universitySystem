@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Set;
@@ -39,7 +36,9 @@ class SubjectTests {
 
         Subject subject = getSubject();
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
-        assertEquals(0, constraintViolationsSubject.size());
+        if (!constraintViolationsSubject.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsSubject);
+        }
 
         subjectRepository.save(subject);
 

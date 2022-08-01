@@ -60,7 +60,9 @@ class TeacherTests {
 
         Teacher teacher = getTeacher();
         Set<ConstraintViolation<Teacher>> constraintViolations = validator.validate(teacher);
-        assertEquals(0, constraintViolations.size());
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
 
         teacherRepository.save(teacher);
 
@@ -78,18 +80,24 @@ class TeacherTests {
 
         Teacher teacher = getTeacher();
         Set<ConstraintViolation<Teacher>> constraintViolationsTeacher = validator.validate(teacher);
-        assertEquals(0, constraintViolationsTeacher.size());
+        if (!constraintViolationsTeacher.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsTeacher);
+        }
         teacherRepository.save(teacher);
 
         Subject subject = getSubject();
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
-        assertEquals(0, constraintViolationsSubject.size());
+        if (!constraintViolationsSubject.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsSubject);
+        }
         subjectRepository.save(subject);
 
         TeacherAssignation assignation = new TeacherAssignation(teacher.getId(), subject.getId());
         assignation.setRoleInClass("MAIN_TEACHER");
         Set<ConstraintViolation<TeacherAssignation>> constraintViolationsAssignation = validator.validate(assignation);
-        assertEquals(0, constraintViolationsAssignation.size());
+        if (!constraintViolationsAssignation.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolationsAssignation);
+        }
 
         assertFalse(teacherAssignationRepository.existsById(assignation.getId()));
 
