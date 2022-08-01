@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public abstract class UniversityUser {
     @NotNull
     private String governmentId;
     @NotNull
+    @Email
     private String email;
 
     private String mobilePhone;
