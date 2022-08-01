@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,6 +55,9 @@ class StudentTests {
         student.setLandPhone("1234567896");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         student.setBirthdate(dateFormat.parse("14-05-2000"));
+        student.setUsername("TEST_USERNAME");
+        student.setUserPassword("TEST_PASSWORD");
+        student.setEnrollmentDate(new Date());
         return student;
     }
 
@@ -92,7 +96,7 @@ class StudentTests {
         }
         studentRepository.save(student);
 
-        Subject subject = getSubject();
+        Subject subject = getSubject("SUBJECT1");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
         if (!constraintViolationsSubject.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsSubject);
@@ -128,7 +132,7 @@ class StudentTests {
         }
         studentRepository.save(student);
 
-        Subject subject = getSubject();
+        Subject subject = getSubject("SUBJECT1");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
         if (!constraintViolationsSubject.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsSubject);

@@ -34,7 +34,7 @@ class SubjectTests {
     void createAndDeleteSubjectTest() throws ParseException {
         assertEquals(0, subjectRepository.count());
 
-        Subject subject = getSubject();
+        Subject subject = getSubject("SUBJECT1");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
         if (!constraintViolationsSubject.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsSubject);
@@ -50,9 +50,9 @@ class SubjectTests {
 
     }
 
-    protected static Subject getSubject() throws ParseException {
+    protected static Subject getSubject(String name) throws ParseException {
         Subject subject = new Subject();
-        subject.setName("SUBJECT_CLASS_NAME");
+        subject.setName(name);
         subject.setDescription("CLASS_DESCRIPTION");
         subject.setRemote(true);
         subject.setOnSite(true);

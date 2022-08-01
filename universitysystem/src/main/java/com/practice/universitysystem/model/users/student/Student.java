@@ -1,13 +1,14 @@
 package com.practice.universitysystem.model.users.student;
 
 import com.practice.universitysystem.model.users.UniversityUser;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.util.Date;
 
 @Entity
 @Data
@@ -17,12 +18,8 @@ public class Student extends UniversityUser {
 
     //id is a FK from UniversityUser
 
-    /**
-     * Date that a student was enrolled on, by default is
-     * assigned the current date
-     */
     @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date enrollmentDate = new Date();
+    @Setter(AccessLevel.NONE)
+    private static final String ROLE = "STUDENT";
 
 }

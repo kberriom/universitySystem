@@ -13,6 +13,11 @@ import java.util.Set;
 @Data
 @Check(constraints =
         "(is_remote IS NOT NULL OR is_on_site IS NOT NULL) AND (is_on_site IS NOT NULL AND room_location IS NOT NULL)")
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "subject_name_is_unique",
+                columnNames = {"name"})
+})
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

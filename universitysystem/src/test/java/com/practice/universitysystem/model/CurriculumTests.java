@@ -50,14 +50,14 @@ class CurriculumTests {
         SimpleDateFormat dateFormatEnd = new SimpleDateFormat("dd-MM-yyyy");
         curriculum.setDateEnd(dateFormatEnd.parse("14-05-2001"));
 
-        Subject subject1 = getSubject();
+        Subject subject1 = getSubject("SUBJECT1");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject1 = validator.validate(subject1);
         if (!constraintViolationsSubject1.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsSubject1);
         }
         subjectRepository.save(subject1);
 
-        Subject subject2 = getSubject();
+        Subject subject2 = getSubject("SUBJECT2");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject2 = validator.validate(subject2);
         if (!constraintViolationsSubject2.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsSubject2);

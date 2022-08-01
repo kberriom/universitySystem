@@ -20,4 +20,8 @@ public class Teacher extends UniversityUser {
     @NotNull
     private String department;
 
+    @NotNull
+    @Setter(AccessLevel.NONE)
+    private static final String ROLE = "TEACHER";
+
 }

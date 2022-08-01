@@ -10,6 +10,11 @@ import java.util.Set;
 
 @Data
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "curriculum_name_is_unique",
+                columnNames = {"name"})
+})
 public class Curriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

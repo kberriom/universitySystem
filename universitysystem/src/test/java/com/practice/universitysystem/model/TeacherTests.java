@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
@@ -35,6 +36,9 @@ class TeacherTests {
         teacher.setDepartment("TEST_DEPARTMENT");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         teacher.setBirthdate(dateFormat.parse("14-05-2000"));
+        teacher.setUsername("TEACHER_USERNAME");
+        teacher.setUserPassword("PASSWORD_EXAMPLE");
+        teacher.setEnrollmentDate(new Date());
         return teacher;
     }
 
@@ -85,7 +89,7 @@ class TeacherTests {
         }
         teacherRepository.save(teacher);
 
-        Subject subject = getSubject();
+        Subject subject = getSubject("SUBJECT1");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
         if (!constraintViolationsSubject.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsSubject);
