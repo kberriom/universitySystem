@@ -1,9 +1,9 @@
 package com.practice.universitysystem.model.users.student.student_subject;
 
 import com.practice.universitysystem.model.curriculum.subject.Grade;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
@@ -14,13 +14,15 @@ import java.util.Set;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class StudentSubjectRegistration {
     @EmbeddedId
     private StudentSubjectRegistrationId id;
 
     @NotNull
-    @Setter(AccessLevel.NONE)
-    private final Date registrationDate = new Date();
+    @Temporal(TemporalType.DATE)
+    @CreatedDate
+    private Date registrationDate;
 
     @DecimalMin(value = "0")
     @DecimalMax(value = "5")
@@ -35,9 +37,6 @@ public class StudentSubjectRegistration {
         registrationId.setStudentUserId(studentUserId);
         registrationId.setSubjectId(subjectId);
         this.id = registrationId;
-    }
-
-    public StudentSubjectRegistration() {
     }
 
 }

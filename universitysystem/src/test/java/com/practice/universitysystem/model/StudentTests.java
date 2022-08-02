@@ -104,6 +104,7 @@ class StudentTests {
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
+        subjectRegistration.setRegistrationDate(new Date());
         Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
         if (!constraintViolationsRegistration.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsRegistration);
@@ -140,6 +141,7 @@ class StudentTests {
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
+        subjectRegistration.setRegistrationDate(new Date());
         Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
         if (!constraintViolationsRegistration.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsRegistration);
@@ -156,7 +158,7 @@ class StudentTests {
         grade1.setDescription("GRADE_DESCRIPTION");
         grade1.setGradeValue(3.5);
         grade1.setPercentageOfFinalGrade(50);
-        grade1.setRegistration(subjectRegistration);
+        grade1.setRegistrationId(subjectRegistration.getId());
         Set<ConstraintViolation<Grade>> constraintViolationsGrade1 = validator.validate(grade1);
         if (!constraintViolationsGrade1.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsGrade1);
@@ -166,7 +168,7 @@ class StudentTests {
         grade2.setDescription("GRADE_DESCRIPTION");
         grade2.setGradeValue(5);
         grade2.setPercentageOfFinalGrade(50);
-        grade2.setRegistration(subjectRegistration);
+        grade2.setRegistrationId(subjectRegistration.getId());
         Set<ConstraintViolation<Grade>> constraintViolationsGrade2 = validator.validate(grade2);
         if (!constraintViolationsGrade2.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsGrade2);

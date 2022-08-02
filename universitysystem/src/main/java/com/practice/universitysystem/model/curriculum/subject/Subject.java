@@ -25,15 +25,22 @@ public class Subject {
 
     @NotNull
     private String name;
+
     @NotNull
     private String description;
+
     @Temporal(TemporalType.DATE)
+    @NotNull
     private Date startDate;
+
     @Temporal(TemporalType.DATE)
+    @NotNull
     private Date endDate;
+
     private boolean isRemote;
     private boolean isOnSite;
     private String roomLocation;
+
     @NotNull
     private int creditsValue;
 
