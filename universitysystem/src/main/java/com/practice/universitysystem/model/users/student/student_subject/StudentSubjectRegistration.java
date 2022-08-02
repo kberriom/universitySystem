@@ -1,9 +1,11 @@
 package com.practice.universitysystem.model.users.student.student_subject;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.practice.universitysystem.model.curriculum.subject.Grade;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
@@ -21,6 +23,8 @@ public class StudentSubjectRegistration {
 
     @NotNull
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     @CreatedDate
     private Date registrationDate;
 

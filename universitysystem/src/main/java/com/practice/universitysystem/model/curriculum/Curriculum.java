@@ -1,7 +1,9 @@
 package com.practice.universitysystem.model.curriculum;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,10 +29,14 @@ public class Curriculum {
     String description;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     @NotNull
     private Date dateStart;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     @NotNull
     private Date dateEnd;
 

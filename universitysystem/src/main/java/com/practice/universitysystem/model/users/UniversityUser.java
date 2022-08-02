@@ -1,8 +1,10 @@
 package com.practice.universitysystem.model.users;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.Check;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -44,6 +46,9 @@ public abstract class UniversityUser {
     private String landPhone;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    @NotNull
     private Date birthdate;
 
     @NotNull
@@ -54,6 +59,8 @@ public abstract class UniversityUser {
 
     @NotNull
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     @CreatedDate
     private Date enrollmentDate;
 
