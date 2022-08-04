@@ -30,13 +30,13 @@ public class Curriculum {
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @NotNull
     private Date dateStart;
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @NotNull
     private Date dateEnd;
 

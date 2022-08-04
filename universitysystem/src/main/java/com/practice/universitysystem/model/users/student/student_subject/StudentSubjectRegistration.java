@@ -24,7 +24,7 @@ public class StudentSubjectRegistration {
     @NotNull
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @CreatedDate
     private Date registrationDate;
 

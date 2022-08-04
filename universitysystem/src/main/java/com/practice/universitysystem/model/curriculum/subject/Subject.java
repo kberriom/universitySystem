@@ -33,13 +33,13 @@ public class Subject {
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @NotNull
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @NotNull
     private Date endDate;
 

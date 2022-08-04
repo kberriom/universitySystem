@@ -1,10 +1,7 @@
 package com.practice.universitysystem.model.users.student;
 
 import com.practice.universitysystem.model.users.UniversityUser;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
