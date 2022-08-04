@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-public class UniversityUserDto {
+public class StudentDto {
 
     private String name;
 

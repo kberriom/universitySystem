@@ -1,10 +1,12 @@
 package com.practice.universitysystem.controller;
 
-import com.practice.universitysystem.dto.LoginCredentials;
-import com.practice.universitysystem.dto.UniversityUserDto;
+import com.practice.universitysystem.dto.LoginCredentialsDto;
+import com.practice.universitysystem.dto.StudentDto;
+import com.practice.universitysystem.dto.mapper.StudentMapper;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.repository.users.student.StudentRepository;
 import com.practice.universitysystem.security.JwtUtil;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,22 +35,14 @@ public class AuthController {
     @Autowired
     private StudentRepository studentRepository;
 
+    private final StudentMapper studentMapper = Mappers.getMapper(StudentMapper.class);
+
     @PostMapping("/registerStudent")
-    public Map<String, Object> studentRegistration(@RequestBody UniversityUserDto userDto) {
+    public Map<String, Object> studentRegistration(@RequestBody StudentDto userDto) {
         String encodedPassword = passwordEncoder.encode(userDto.getUserPassword());
         userDto.setUserPassword(encodedPassword);
 
-        Student student = new Student();
-
-        student.setName(userDto.getName());
-        student.setLastName(userDto.getLastName());
-        student.setGovernmentId(userDto.getGovernmentId());
-        student.setEmail(userDto.getEmail());
-        student.setMobilePhone(userDto.getMobilePhone());
-        student.setLandPhone(userDto.getLandPhone());
-        student.setBirthdate(userDto.getBirthdate());
-        student.setUserPassword(userDto.getUserPassword());
-        student.setUsername(userDto.getUsername());
+        Student student = studentMapper.dtoToStudent(userDto);
         student.setEnrollmentDate(new Date());
 
         student = studentRepository.save(student);
@@ -60,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody LoginCredentials credentials) {
+    public Map<String, Object> login(@RequestBody LoginCredentialsDto credentials) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword());
 
