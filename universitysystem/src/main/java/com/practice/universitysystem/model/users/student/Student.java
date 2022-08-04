@@ -17,6 +17,7 @@ public class Student extends UniversityUser {
 
     @NotNull
     @Setter(AccessLevel.NONE)
-    private static final String ROLE = "STUDENT";
+    @Getter
+    private String role = "ROLE_STUDENT";
 
 }
