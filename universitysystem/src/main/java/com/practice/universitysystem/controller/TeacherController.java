@@ -1,7 +1,7 @@
 package com.practice.universitysystem.controller;
 
 import com.practice.universitysystem.model.users.teacher.Teacher;
-import com.practice.universitysystem.repository.users.teacher.TeacherRepository;
+import com.practice.universitysystem.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeacherController {
 
     @Autowired
-    TeacherRepository teacherRepository;
+    TeacherService teacherService;
 
     @GetMapping("/getTeacherInfo")
     @Secured("ROLE_TEACHER")
     public Teacher getTeacherInfo() {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return teacherRepository.findByEmail(email).orElseThrow();
+        return teacherService.getTeacher(email);
     }
 
 }
