@@ -1,20 +1,20 @@
 package com.practice.universitysystem.controller;
 
-import com.practice.universitysystem.dto.LoginCredentialsDto;
-import com.practice.universitysystem.dto.StudentDto;
+import com.practice.universitysystem.dto.credentials.LoginCredentialsDto;
+import com.practice.universitysystem.dto.credentials.NewPasswordDto;
+import com.practice.universitysystem.dto.student.StudentDto;
 import com.practice.universitysystem.dto.TeacherDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.teacher.Teacher;
-import com.practice.universitysystem.security.JwtUtil;
+import com.practice.universitysystem.service.AuthService;
 import com.practice.universitysystem.service.StudentService;
 import com.practice.universitysystem.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -25,38 +25,47 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authManager;
-    @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
     private StudentService studentService;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/createStudent")
     public ResponseEntity<Student> createStudent(@RequestBody StudentDto userDto) {
 
-        studentService.createStudent(userDto);
+        Student student = studentService.createStudent(userDto);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
     @PostMapping("/createTeacher")
     public ResponseEntity<Teacher> createTeacher(@RequestBody TeacherDto userDto) {
 
-        teacherService.createTeacher(userDto);
+        Teacher teacher = teacherService.createTeacher(userDto);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(teacher, HttpStatus.CREATED);
     }
 
     @GetMapping("/login")
     public Map<String, Object> login(@RequestBody LoginCredentialsDto credentials) {
         try {
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword());
+            return Collections.singletonMap("jwt-token", authService.authAndGenerateJwt(credentials.getEmail(), credentials.getPassword()));
 
-            authManager.authenticate(authenticationToken);
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid credentials");
+        }
+    }
 
-            String token = jwtUtil.generateToken(credentials.getEmail());
+    @GetMapping("/updatePassword")
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> updatePassword(@RequestBody NewPasswordDto credentials) {
+        try {
+            authService.usernamePasswordAuthentication(credentials.getEmail(), credentials.getOldPassword());
+
+            authService.changePassword(credentials.getEmail(), credentials.getNewPassword());
+
+            String token = authService.authAndGenerateJwt(credentials.getEmail(), credentials.getNewPassword());
 
             return Collections.singletonMap("jwt-token", token);
 
@@ -64,4 +73,6 @@ public class AuthController {
             throw new BadCredentialsException("Invalid credentials");
         }
     }
+
+
 }

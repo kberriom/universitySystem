@@ -6,7 +6,6 @@ import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.repository.users.teacher.TeacherRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.*;
@@ -18,14 +17,14 @@ import java.util.Set;
 public class TeacherService {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthService authService;
     @Autowired
     private TeacherRepository teacherRepository;
 
     private final TeacherMapper teacherMapper = Mappers.getMapper(TeacherMapper.class);
 
-    public void createTeacher(TeacherDto teacherDto) {
-        String encodedPassword = passwordEncoder.encode(teacherDto.getUserPassword());
+    public Teacher createTeacher(TeacherDto teacherDto) {
+        String encodedPassword = authService.getEncodedPassword(teacherDto.getUserPassword());
         teacherDto.setUserPassword(encodedPassword);
 
         Teacher teacher = teacherMapper.dtoToTeacher(teacherDto);
@@ -39,7 +38,7 @@ public class TeacherService {
             throw new ConstraintViolationException(constraintViolations);
         }
 
-        teacherRepository.save(teacher);
+        return teacherRepository.save(teacher);
     }
 
     public void deleteTeacher() {
