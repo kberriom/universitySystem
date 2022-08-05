@@ -12,6 +12,7 @@ import com.practice.universitysystem.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/createStudent")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<Student> createStudent(@RequestBody StudentDto userDto) {
 
         Student student = studentService.createStudent(userDto);
@@ -40,6 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/createTeacher")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<Teacher> createTeacher(@RequestBody TeacherDto userDto) {
 
         Teacher teacher = teacherService.createTeacher(userDto);

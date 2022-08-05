@@ -36,8 +36,6 @@ public class StudentController {
     @Secured("ROLE_STUDENT")
     public ResponseEntity<Student> updateStudentInfo(@RequestBody StudentUpdateDto studentUpdateDto) {
         String email = authService.getAuthUserEmail();
-        System.out.println(studentUpdateDto);
-        System.out.println(email);
         Student student = studentService.updateStudent(email, studentUpdateDto);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
