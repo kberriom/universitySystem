@@ -18,11 +18,17 @@ import java.util.Date;
 @Check(constraints = "mobile_phone IS NOT NULL OR land_phone IS NOT NULL")
 @Table(uniqueConstraints = {
         @UniqueConstraint(
-                name = "username_gov_id_email_is_unique",
-                columnNames =
-                {
-                        "username", "government_id", "email"
-                })
+                name = "username_is_unique",
+                columnNames = {"username"}
+        ),
+        @UniqueConstraint(
+                name = "government_id_is_unique",
+                columnNames = {"government_id"}
+        ),
+        @UniqueConstraint(
+                name = "email_is_unique",
+                columnNames = {"email"}
+        ),
 })
 public abstract class UniversityUser {
     @Id
