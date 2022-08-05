@@ -64,11 +64,8 @@ public class StudentService {
 
     @Transactional(rollbackFor = Exception.class)
     public Student updateStudent(String email, StudentUpdateDto updateDto) {
-        System.out.println(updateDto);
         Student student = getStudent(email);
-        System.out.println(student);
         studentMapper.update(student, updateDto);
-        System.out.println(student);
         validateStudent(student);
         return studentRepository.save(student);
     }
@@ -91,7 +88,7 @@ public class StudentService {
     }
 
     public Student getStudent(long id) {
-        return studentRepository.getReferenceById(id);
+        return studentRepository.findById(id).orElseThrow();
     }
 
 }
