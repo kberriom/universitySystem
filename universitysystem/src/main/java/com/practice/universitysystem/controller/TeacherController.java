@@ -40,6 +40,14 @@ public class TeacherController {
         return new ResponseEntity<>(teacherService.getAllTeachers(), HttpStatus.OK);
     }
 
+    @GetMapping("/getAllTeacherInfo/paged")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<Object>> getAllTeacherInfoPaged(@RequestParam int page, @RequestParam int size) {
+        List<Object> responseList = teacherService.getTeacherPaginatedList(page, size);
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
+
     @PatchMapping("/updateTeacherInfo")
     @Secured("ROLE_TEACHER")
     public Teacher updateTeacherInfo(@RequestBody TeacherUpdateDto teacherUpdateDto) {
