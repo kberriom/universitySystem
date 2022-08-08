@@ -1,4 +1,4 @@
-package com.practice.universitysystem;
+package com.practice.universitysystem.config;
 
 import com.practice.universitysystem.model.users.admin.Admin;
 import com.practice.universitysystem.repository.users.admin.AdminRepository;

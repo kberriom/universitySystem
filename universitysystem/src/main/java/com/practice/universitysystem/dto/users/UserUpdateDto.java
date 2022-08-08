@@ -1,13 +1,14 @@
-package com.practice.universitysystem.dto.student;
+package com.practice.universitysystem.dto.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 
 
 @Data
 @AllArgsConstructor
-public class StudentUpdateDto {
+@NoArgsConstructor
+public abstract class UserUpdateDto {
 
     private String name;
 

@@ -1,14 +1,18 @@
-package com.practice.universitysystem.dto.teacher;
+package com.practice.universitysystem.dto.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+
 @Data
 @AllArgsConstructor
-public class TeacherDto {
+@NoArgsConstructor
+public abstract class UserDto {
+
     private String name;
 
     private String lastName;
@@ -27,5 +31,4 @@ public class TeacherDto {
 
     private String username;
 
-    private String department;
 }
