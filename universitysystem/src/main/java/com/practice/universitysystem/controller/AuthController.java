@@ -3,7 +3,7 @@ package com.practice.universitysystem.controller;
 import com.practice.universitysystem.dto.credentials.LoginCredentialsDto;
 import com.practice.universitysystem.dto.credentials.NewPasswordDto;
 import com.practice.universitysystem.dto.student.StudentDto;
-import com.practice.universitysystem.dto.TeacherDto;
+import com.practice.universitysystem.dto.teacher.TeacherDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.service.AuthService;

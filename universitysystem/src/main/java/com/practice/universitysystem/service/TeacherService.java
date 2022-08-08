@@ -1,7 +1,8 @@
 package com.practice.universitysystem.service;
 
-import com.practice.universitysystem.dto.TeacherDto;
+import com.practice.universitysystem.dto.teacher.TeacherDto;
 import com.practice.universitysystem.dto.mapper.TeacherMapper;
+import com.practice.universitysystem.dto.teacher.TeacherUpdateDto;
 import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.repository.users.teacher.TeacherRepository;
 import org.mapstruct.factory.Mappers;
@@ -31,27 +32,51 @@ public class TeacherService {
 
         teacher.setEnrollmentDate(new Date());
 
+        validateTeacher(teacher);
+
+        return teacherRepository.save(teacher);
+    }
+
+    public void validateTeacher(Teacher teacher) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<Teacher>> constraintViolations = validator.validate(teacher);
         if (!constraintViolations.isEmpty()) {
             throw new ConstraintViolationException(constraintViolations);
         }
+    }
 
+    public void deleteTeacher(String email) {
+        Teacher teacher = getTeacher(email);
+        teacherRepository.delete(teacher);
+    }
+
+    public void deleteTeacher(long id) {
+        Teacher teacher = getTeacher(id);
+        teacherRepository.delete(teacher);
+    }
+
+    public Teacher updateTeacher(String email, TeacherUpdateDto updateDto) {
+        Teacher teacher = getTeacher(email);
+        teacherMapper.update(teacher, updateDto);
+        validateTeacher(teacher);
         return teacherRepository.save(teacher);
     }
 
-    public void deleteTeacher() {
-        //todo
-    }
-
-    public void updateTeacher() {
-        //todo
+    public Teacher updateTeacher(long id, TeacherUpdateDto updateDto) {
+        Teacher teacher = getTeacher(id);
+        teacherMapper.update(teacher, updateDto);
+        validateTeacher(teacher);
+        return teacherRepository.save(teacher);
     }
 
     public Teacher getTeacher(String email) {
         Optional<Teacher> teacher = teacherRepository.findByEmail(email);
         return teacher.orElseThrow();
+    }
+
+    public Teacher getTeacher(long id) {
+        return teacherRepository.findById(id).orElseThrow();
     }
 
 

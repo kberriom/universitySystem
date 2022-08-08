@@ -20,6 +20,9 @@ public class InicialAdminUserLoader implements ApplicationRunner {
 
     public void run(ApplicationArguments args) {
         String adminName = "admin";
+        if (adminRepository.count() != 0) {
+            return;
+        }
         Admin admin = new Admin();
         admin.setName(adminName);
         admin.setLastName(adminName);

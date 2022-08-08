@@ -1,4 +1,4 @@
-package com.practice.universitysystem.dto;
+package com.practice.universitysystem.dto.teacher;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
