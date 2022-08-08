@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -30,6 +32,12 @@ public class StudentController {
     @Secured("ROLE_ADMIN")
     public Student getStudentInfoById(@PathVariable long id) {
         return studentService.getStudent(id);
+    }
+
+    @GetMapping("/getAllStudentInfo")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<Student>> getAllStudentInfo() {
+        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
 
     @PatchMapping("updateStudentInfo")

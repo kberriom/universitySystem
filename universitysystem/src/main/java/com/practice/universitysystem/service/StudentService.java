@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -89,6 +90,10 @@ public class StudentService {
 
     public Student getStudent(long id) {
         return studentRepository.findById(id).orElseThrow();
+    }
+
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 
 }

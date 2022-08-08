@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -77,6 +78,10 @@ public class TeacherService {
 
     public Teacher getTeacher(long id) {
         return teacherRepository.findById(id).orElseThrow();
+    }
+
+    public List<Teacher> getAllTeachers() {
+        return teacherRepository.findAll();
     }
 
 
