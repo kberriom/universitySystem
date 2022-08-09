@@ -1,6 +1,6 @@
 package com.practice.universitysystem.controller.users;
 
-import com.practice.universitysystem.dto.users.teacher.TeacherUpdateDto;
+import com.practice.universitysystem.dto.users.teacher.TeacherDto;
 import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.service.AuthService;
 import com.practice.universitysystem.service.users.TeacherService;
@@ -49,14 +49,14 @@ public class TeacherController {
 
     @PatchMapping("/updateTeacherInfo")
     @Secured("ROLE_TEACHER")
-    public Teacher updateTeacherInfo(@RequestBody TeacherUpdateDto teacherUpdateDto) {
+    public Teacher updateTeacherInfo(@RequestBody TeacherDto teacherUpdateDto) {
         String email = authService.getAuthUserEmail();
         return teacherService.updateUser(email, teacherUpdateDto);
     }
 
     @PatchMapping("/updateTeacherInfo/{id}")
     @Secured("ROLE_ADMIN")
-    public Teacher updateTeacherInfoById(@PathVariable long id, @RequestBody TeacherUpdateDto teacherUpdateDto) {
+    public Teacher updateTeacherInfoById(@PathVariable long id, @RequestBody TeacherDto teacherUpdateDto) {
         return teacherService.updateUser(id, teacherUpdateDto);
     }
 

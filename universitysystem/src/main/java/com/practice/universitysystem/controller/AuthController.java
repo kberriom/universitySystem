@@ -2,8 +2,6 @@ package com.practice.universitysystem.controller;
 
 import com.practice.universitysystem.dto.credentials.LoginCredentialsDto;
 import com.practice.universitysystem.dto.credentials.NewPasswordDto;
-import com.practice.universitysystem.dto.users.student.StudentDto;
-import com.practice.universitysystem.dto.users.teacher.TeacherDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.service.AuthService;
@@ -34,7 +32,7 @@ public class AuthController {
 
     @PostMapping("/createStudent")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Student> createStudent(@RequestBody StudentDto userDto) {
+    public ResponseEntity<Student> createStudent(@RequestBody Student userDto) {
 
         Student student = studentService.createUser(userDto);
 
@@ -43,7 +41,7 @@ public class AuthController {
 
     @PostMapping("/createTeacher")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Teacher> createTeacher(@RequestBody TeacherDto userDto) {
+    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher userDto) {
 
         Teacher teacher = teacherService.createUser(userDto);
 

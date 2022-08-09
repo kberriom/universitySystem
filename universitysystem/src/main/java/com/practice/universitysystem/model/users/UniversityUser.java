@@ -33,6 +33,7 @@ import java.util.Date;
 public abstract class UniversityUser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
     @NotNull
@@ -70,6 +71,7 @@ public abstract class UniversityUser {
     @DateTimeFormat(style = "dd-MM-yyyy")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @CreatedDate
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date enrollmentDate;
 
 }

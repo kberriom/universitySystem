@@ -1,12 +1,11 @@
 package com.practice.universitysystem.controller.users;
 
-import com.practice.universitysystem.dto.users.student.StudentUpdateDto;
+import com.practice.universitysystem.dto.users.student.StudentDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.service.AuthService;
 import com.practice.universitysystem.service.users.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +21,7 @@ public class StudentController {
     AuthService authService;
 
     @GetMapping("/getStudentInfo")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_STUDENT")
     public Student getStudentInfo() {
         String email = authService.getAuthUserEmail();
@@ -29,52 +29,54 @@ public class StudentController {
     }
 
     @GetMapping("/getStudentInfo/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
     public Student getStudentInfoById(@PathVariable long id) {
         return studentService.getUser(id);
     }
 
     @GetMapping("/getAllStudentInfo")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<Student>> getAllStudentInfo() {
-        return new ResponseEntity<>(studentService.getAllUsers(), HttpStatus.OK);
+    public List<Student> getAllStudentInfo() {
+        return studentService.getAllUsers();
     }
 
     @GetMapping("/getAllStudentInfo/paged")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<Object>> getAllStudentInfoPaged(@RequestParam int page, @RequestParam int size) {
-        List<Object> responseList = studentService.getUserPaginatedList(page, size);
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    public List<Object> getAllStudentInfoPaged(@RequestParam int page, @RequestParam int size) {
+        return studentService.getUserPaginatedList(page, size);
     }
 
     @PatchMapping("updateStudentInfo")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_STUDENT")
-    public ResponseEntity<Student> updateStudentInfo(@RequestBody StudentUpdateDto studentUpdateDto) {
+    public Student updateStudentInfo(@RequestBody StudentDto studentUpdateDto) {
         String email = authService.getAuthUserEmail();
-        Student student = studentService.updateUser(email, studentUpdateDto);
-        return new ResponseEntity<>(student, HttpStatus.OK);
+        return studentService.updateUser(email, studentUpdateDto);
     }
 
     @PatchMapping("updateStudentInfo/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Student> updateStudentInfoById(@RequestBody StudentUpdateDto studentUpdateDto, @PathVariable long id) {
-        Student student = studentService.updateUser(id, studentUpdateDto);
-        return new ResponseEntity<>(student, HttpStatus.OK);
+    public Student updateStudentInfoById(@RequestBody StudentDto studentUpdateDto, @PathVariable long id) {
+        return studentService.updateUser(id, studentUpdateDto);
     }
 
     @DeleteMapping("deleteStudentInfo")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_STUDENT")
-    public ResponseEntity<Student> deleteStudentInfo() {
+    public void deleteStudentInfo() {
         String email = authService.getAuthUserEmail();
         studentService.deleteUser(email);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("deleteStudentInfo/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Student> deleteStudentInfoById(@PathVariable long id) {
+    public void deleteStudentInfoById(@PathVariable long id) {
         studentService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

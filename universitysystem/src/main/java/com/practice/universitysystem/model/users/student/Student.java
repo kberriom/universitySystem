@@ -1,5 +1,6 @@
 package com.practice.universitysystem.model.users.student;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.universitysystem.model.users.UniversityUser;
 import lombok.*;
 
@@ -18,6 +19,7 @@ public class Student extends UniversityUser {
     @NotNull
     @Setter(AccessLevel.NONE)
     @Getter
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String role = "ROLE_STUDENT";
 
 }
