@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Component
@@ -37,10 +38,10 @@ public class InicialAdminUserLoader implements ApplicationRunner {
         admin.setEmail(adminName + domain);
         admin.setMobilePhone("0");
         admin.setLandPhone("0");
-        admin.setBirthdate(new Date());
+        admin.setBirthdate(LocalDate.now());
         admin.setUsername(adminName);
         admin.setUserPassword(authService.getEncodedPassword(password));
-        admin.setEnrollmentDate(new Date());
+        admin.setEnrollmentDate(LocalDate.now());
         adminRepository.save(admin);
     }
 }

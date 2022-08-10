@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.practice.universitysystem.model.curriculum.Curriculum;
 import lombok.Data;
 import org.hibernate.annotations.Check;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -31,24 +30,20 @@ public class Subject {
     @NotNull
     private String description;
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "dd-MM-yyyy")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @NotNull
-    private Date startDate;
+    private LocalDate startDate;
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "dd-MM-yyyy")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @NotNull
-    private Date endDate;
+    private LocalDate endDate;
 
     private boolean isRemote;
     private boolean isOnSite;
     private String roomLocation;
 
     @NotNull
-    private int creditsValue;
+    private Integer creditsValue;
 
     @ManyToMany(cascade = CascadeType.ALL)
     Set<Curriculum> curriculumsContainingSubject;

@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.validation.*;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -51,7 +52,7 @@ public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S ext
 
         U user = userMapper.dtoToUser(userDto);
 
-        user.setEnrollmentDate(new Date());
+        user.setEnrollmentDate(LocalDate.now());
 
         validateUser(user);
 

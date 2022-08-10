@@ -18,12 +18,12 @@ public class Grade {
     @NotNull
     @DecimalMin(value = "0")
     @DecimalMax(value = "5")
-    private double gradeValue;
+    private Double gradeValue;
 
     @NotNull
     @DecimalMin(value = "0.01")
     @DecimalMax(value = "100")
-    private double percentageOfFinalGrade;
+    private Double percentageOfFinalGrade;
 
     @NotNull
     private StudentSubjectRegistrationId registrationId;
