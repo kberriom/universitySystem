@@ -5,6 +5,7 @@ import com.practice.universitysystem.model.curriculum.Curriculum;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.repository.curriculum.CurriculumRepository;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
+import com.practice.universitysystem.service.ServiceUtils;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,17 @@ import java.util.Set;
 @Service
 public class CurriculumService {
 
-    @Autowired
     CurriculumRepository curriculumRepository;
-    @Autowired
     SubjectRepository subjectRepository;
+
+    ServiceUtils<Curriculum, Long, CurriculumRepository> serviceUtilsCurriculum;
+
+    @Autowired
+    public CurriculumService(CurriculumRepository curriculumRepository, SubjectRepository subjectRepository) {
+        this.curriculumRepository = curriculumRepository;
+        this.subjectRepository = subjectRepository;
+        serviceUtilsCurriculum = new ServiceUtils<>(curriculumRepository);
+    }
 
     private static final CurriculumMapper mapper = Mappers.getMapper(CurriculumMapper.class);
 
@@ -47,6 +55,14 @@ public class CurriculumService {
 
     public Curriculum getCurriculum(String name) {
         return curriculumRepository.findByName(name).orElseThrow();
+    }
+
+    public List<Curriculum> getAllCurriculum() {
+        return curriculumRepository.findAll();
+    }
+
+    public List<Object> getPaginatedCurriculum(int page, int pageSize) {
+        return serviceUtilsCurriculum.getPaginatedList(page, pageSize);
     }
 
     public Curriculum updateCurriculum(String name, CurriculumDto curriculumDto) {

@@ -39,6 +39,18 @@ public class CurriculumController {
         return curriculumService.getCurriculum(name);
     }
 
+    @GetMapping("/getAllCurriculums")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Curriculum> getAllCurriculums() {
+        return curriculumService.getAllCurriculum();
+    }
+
+    @GetMapping("/getAllCurriculums/paged")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Object> getAllCurriculumsPaged(@RequestParam int page, @RequestParam int size) {
+        return curriculumService.getPaginatedCurriculum(page, size);
+    }
+
     @PatchMapping("/updateCurriculum/{name}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
