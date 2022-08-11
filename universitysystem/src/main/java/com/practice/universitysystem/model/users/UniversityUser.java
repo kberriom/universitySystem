@@ -32,6 +32,7 @@ import java.time.LocalDate;
 public abstract class UniversityUser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
     @NotNull

@@ -1,9 +1,7 @@
 package com.practice.universitysystem.service.users;
 
 import com.practice.universitysystem.dto.PageInfoDto;
-import com.practice.universitysystem.dto.users.UserUpdateDto;
 import com.practice.universitysystem.dto.users.UserDto;
-import com.practice.universitysystem.dto.users.UserMapper;
 import com.practice.universitysystem.model.users.UniversityUser;
 import com.practice.universitysystem.repository.users.UniversityUserRepository;
 import com.practice.universitysystem.service.AuthService;
@@ -18,22 +16,17 @@ import java.time.LocalDate;
 import java.util.*;
 
 /**
- * @param <M> Mapper utility type
  * @param <U> Specific User repository type
- * @param <S> UserUpdateDto instance type
  * @param <D> UserDto instance type
  * @param <R> Instance type repository
  */
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S extends UserUpdateDto, D extends UserDto, U extends UniversityUser, R extends JpaRepository<U, Long>>{
+public abstract class UniversityUserService<D extends UserDto,M extends UserMapper<U, D>, U extends UniversityUser, R extends JpaRepository<U, Long>>{
 
     private AuthService authService;
 
-    /**
-     * MapStruct User mapper instance Mapper
-     */
-    private M userMapper;
+    private M mapper;
 
     /**
      * User instance patent repository.
@@ -50,7 +43,7 @@ public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S ext
         String encodedPassword = authService.getEncodedPassword(userDto.getUserPassword());
         userDto.setUserPassword(encodedPassword);
 
-        U user = userMapper.dtoToUser(userDto);
+        U user = mapper.dtoToUser(userDto);
 
         user.setEnrollmentDate(LocalDate.now());
 
@@ -78,16 +71,17 @@ public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S ext
         instanceUserRepository.delete(user);
     }
 
-    public U updateUser(String email, S updateDto) {
-        U user = getUser(email);
-        userMapper.update(user, updateDto);
+    public U updateUser(String email, D updateDto) {
+        U user = mapper.update(getUser(email), updateDto);
         validateUser(user);
         return instanceUserRepository.save(user);
     }
 
-    public U updateUser(long id, S updateDto) {
-        U user = getUser(id);
-        userMapper.update(user, updateDto);
+    /**
+     * Admin update, can update birthdate and gov id
+     */
+    public U updateUser(long id, D updateDto) {
+        U user = mapper.adminUpdate(getUser(id), updateDto);
         validateUser(user);
         return instanceUserRepository.save(user);
     }
