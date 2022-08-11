@@ -5,7 +5,6 @@ import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
 import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignation;
 import com.practice.universitysystem.service.subject.SubjectService;
-import com.practice.universitysystem.service.users.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -19,8 +18,6 @@ public class SubjectController {
 
     @Autowired
     SubjectService subjectService;
-    @Autowired
-    StudentService studentService;
 
     @PostMapping("/createSubject")
     @ResponseStatus(HttpStatus.CREATED)
@@ -72,14 +69,14 @@ public class SubjectController {
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_ADMIN")
     public StudentSubjectRegistration addStudent(@RequestParam Long studentId, @RequestParam String subjectName) {
-        return subjectService.addStudentToSubject(studentService.getUser(studentId), subjectName);
+        return subjectService.addStudentToSubject(studentId, subjectName);
     }
 
     @DeleteMapping("/removeStudent")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
     public void removeStudent(@RequestParam Long studentId, @RequestParam String subjectName) {
-        subjectService.removeStudent(studentService.getUser(studentId), subjectName);
+        subjectService.removeStudent(studentId, subjectName);
     }
 
     @GetMapping("/getAllTeachers/{subjectName}")

@@ -72,9 +72,9 @@ public class SubjectService {
         return registrationRepository.findAllBySubjectId(subject.getId());
     }
 
-    public StudentSubjectRegistration addStudentToSubject(Student student, String subjectName) {
+    public StudentSubjectRegistration addStudentToSubject(Long studentId, String subjectName) {
         StudentSubjectRegistration subjectRegistration =
-                new StudentSubjectRegistration(student.getId(), getSubject(subjectName).getId());
+                new StudentSubjectRegistration(studentId, getSubject(subjectName).getId());
 
         subjectRegistration.setRegistrationDate(LocalDate.now());
 
@@ -83,9 +83,9 @@ public class SubjectService {
         return registrationRepository.save(subjectRegistration);
     }
 
-    public void removeStudent(Student student, String subjectName) {
+    public void removeStudent(Long studentId, String subjectName) {
         StudentSubjectRegistrationId registrationId = new StudentSubjectRegistrationId();
-        registrationId.setStudentUserId(student.getId());
+        registrationId.setStudentUserId(studentId);
         registrationId.setSubjectId(getSubject(subjectName).getId());
         registrationRepository.deleteById(registrationId);
     }
