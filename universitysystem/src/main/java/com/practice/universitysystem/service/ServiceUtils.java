@@ -6,8 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.validation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @param <T> A model extending {@link JpaRepository}
@@ -44,6 +46,15 @@ public class ServiceUtils<T, I, R extends JpaRepository<T, I>> {
         responseList.add(pageInfo);
         responseList.addAll(thingList);
         return responseList;
+    }
+
+    public void validate(T thing) throws ConstraintViolationException {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(thing);
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
     }
 
     private long maxPageNumberGiven(long pageSize) {
