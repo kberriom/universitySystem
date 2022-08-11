@@ -1,6 +1,7 @@
 package com.practice.universitysystem.model.curriculum.subject;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.practice.universitysystem.model.curriculum.Curriculum;
 import lombok.Data;
 import org.hibernate.annotations.Check;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Entity
 @Data
 @Check(constraints =
-        "(is_remote IS NOT NULL OR is_on_site IS NOT NULL) AND (is_on_site IS NOT NULL AND room_location IS NOT NULL)")
+        "(remote IS NOT NULL OR on_site IS NOT NULL) AND (on_site IS NOT NULL AND room_location IS NOT NULL)")
 @Table(uniqueConstraints = {
         @UniqueConstraint(
                 name = "subject_name_is_unique",
@@ -38,14 +39,37 @@ public class Subject {
     @NotNull
     private LocalDate endDate;
 
-    private boolean isRemote;
-    private boolean isOnSite;
+    @Column(name = "remote")
+    private Boolean remote;
+    @Column(name = "on_site")
+    private Boolean onSite;
     private String roomLocation;
 
     @NotNull
     private Integer creditsValue;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     Set<Curriculum> curriculumsContainingSubject;
 
+    /*
+    Lombok generates non-standard named setters and getters for booleans
+    and that causes conflicts with libs (spring parser, mapstruct)
+    */
+
+    public boolean isRemote() {
+        return remote;
+    }
+
+    public void setRemote(boolean remote) {
+        this.remote = remote;
+    }
+
+    public boolean isOnSite() {
+        return onSite;
+    }
+
+    public void setOnSite(boolean onSite) {
+        this.onSite = onSite;
+    }
 }
