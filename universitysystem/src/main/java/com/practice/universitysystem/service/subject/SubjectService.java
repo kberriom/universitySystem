@@ -5,9 +5,11 @@ import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistrationId;
+import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignation;
+import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignationId;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
-import com.practice.universitysystem.repository.users.student.StudentRepository;
 import com.practice.universitysystem.repository.users.student.student_subject.StudentSubjectRegistrationRepository;
+import com.practice.universitysystem.repository.users.teacher.teacher_assignation.TeacherAssignationRepository;
 import com.practice.universitysystem.service.ServiceUtils;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +23,20 @@ public class SubjectService {
 
     SubjectRepository subjectRepository;
     StudentSubjectRegistrationRepository registrationRepository;
-    StudentRepository studentRepository;
+    TeacherAssignationRepository teacherAssignationRepository;
 
     ServiceUtils<Subject, Long, SubjectRepository> subjectServiceUtils;
     ServiceUtils<StudentSubjectRegistration, StudentSubjectRegistrationId, StudentSubjectRegistrationRepository> registrationServiceUtils;
+    ServiceUtils<TeacherAssignation, TeacherAssignationId, TeacherAssignationRepository> teacherAssignationServiceUtils;
 
     @Autowired
-    public SubjectService(SubjectRepository subjectRepository, StudentSubjectRegistrationRepository registrationRepository, StudentRepository studentRepository) {
+    public SubjectService(SubjectRepository subjectRepository, StudentSubjectRegistrationRepository registrationRepository, TeacherAssignationRepository teacherAssignationRepository) {
         this.registrationRepository = registrationRepository;
+        this.teacherAssignationRepository = teacherAssignationRepository;
         this.subjectRepository = subjectRepository;
-        this.studentRepository = studentRepository;
         subjectServiceUtils = new ServiceUtils<>(subjectRepository);
         registrationServiceUtils = new ServiceUtils<>(registrationRepository);
+        teacherAssignationServiceUtils = new ServiceUtils<>(teacherAssignationRepository);
     }
 
     private static final SubjectMapper mapper = Mappers.getMapper(SubjectMapper.class);
@@ -86,21 +90,36 @@ public class SubjectService {
         registrationRepository.deleteById(registrationId);
     }
 
-    public void getAllTeachers() {
-        //todo
+    public List<TeacherAssignation> getAllTeachers(String subjectName) {
+        Subject subject = getSubject(subjectName);
+        return teacherAssignationRepository.findAllBySubjectId(subject.getId());
     }
 
-    public void addTeacher() {
-        //todo
+    public TeacherAssignation addTeacherToSubject(Long teacherId, String subjectName, String roleInClass) {
+        TeacherAssignation teacherAssignation =
+                new TeacherAssignation(teacherId, getSubject(subjectName).getId());
+
+        teacherAssignation.setRoleInClass(roleInClass);
+
+        teacherAssignationServiceUtils.validate(teacherAssignation);
+
+        return teacherAssignationRepository.save(teacherAssignation);
     }
 
-    public void removeTeacher() {
-        //todo
+    public void removeTeacher(Long teacherId, String subjectName) {
+        TeacherAssignationId assignationId = new TeacherAssignationId();
+        assignationId.setTeacherUserId(teacherId);
+        assignationId.setSubjectId(getSubject(subjectName).getId());
+        teacherAssignationRepository.deleteById(assignationId);
     }
 
-    public void modifyTeacherRoleInSubject() {
-        //todo
+    public TeacherAssignation modifyTeacherRoleInSubject(Long teacherId, String subjectName, String roleInClass) {
+        TeacherAssignationId assignationId = new TeacherAssignationId();
+        assignationId.setTeacherUserId(teacherId);
+        assignationId.setSubjectId(getSubject(subjectName).getId());
+        TeacherAssignation teacherAssignation = teacherAssignationRepository.findById(assignationId).orElseThrow();
+        teacherAssignation.setRoleInClass(roleInClass);
+        return teacherAssignationRepository.save(teacherAssignation);
     }
-
 
 }

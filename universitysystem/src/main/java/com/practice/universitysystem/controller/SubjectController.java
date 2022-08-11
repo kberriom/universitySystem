@@ -2,8 +2,8 @@ package com.practice.universitysystem.controller;
 
 import com.practice.universitysystem.dto.SubjectDto;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
-import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
+import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignation;
 import com.practice.universitysystem.service.subject.SubjectService;
 import com.practice.universitysystem.service.users.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +80,34 @@ public class SubjectController {
     @Secured("ROLE_ADMIN")
     public void removeStudent(@RequestParam Long studentId, @RequestParam String subjectName) {
         subjectService.removeStudent(studentService.getUser(studentId), subjectName);
+    }
+
+    @GetMapping("/getAllTeachers/{subjectName}")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public List<TeacherAssignation> getAllTeachers(@PathVariable String subjectName) {
+        return subjectService.getAllTeachers(subjectName);
+    }
+
+    @PostMapping("/addTeacher")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_ADMIN")
+    public TeacherAssignation addTeacherToSubject(@RequestParam Long teacherId, @RequestParam String subjectName, @RequestParam String roleInClass) {
+        return subjectService.addTeacherToSubject(teacherId, subjectName, roleInClass);
+    }
+
+    @DeleteMapping("/removeTeacher")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
+    public void removeTeacher(@RequestParam Long teacherId, @RequestParam String subjectName) {
+        subjectService.removeTeacher(teacherId, subjectName);
+    }
+
+    @PostMapping("/modifyTeacherRole")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public TeacherAssignation modifyTeacherRoleInSubject(@RequestParam Long teacherId, @RequestParam String subjectName, @RequestParam String roleInClass) {
+        return subjectService.modifyTeacherRoleInSubject(teacherId, subjectName, roleInClass);
     }
 
 }
