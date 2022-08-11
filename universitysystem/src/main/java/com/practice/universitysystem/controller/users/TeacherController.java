@@ -6,7 +6,6 @@ import com.practice.universitysystem.service.AuthService;
 import com.practice.universitysystem.service.users.teacher.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,16 +34,17 @@ public class TeacherController {
     }
 
     @GetMapping("/getAllTeacherInfo")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<Teacher>> getAllTeacherInfo() {
-        return new ResponseEntity<>(teacherService.getAllUsers(), HttpStatus.OK);
+    public List<Teacher> getAllTeacherInfo() {
+        return teacherService.getAllUsers();
     }
 
     @GetMapping("/getAllTeacherInfo/paged")
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<Object>> getAllTeacherInfoPaged(@RequestParam int page, @RequestParam int size) {
-        List<Object> responseList = teacherService.getUserPaginatedList(page, size);
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    public List<Object> getAllTeacherInfoPaged(@RequestParam int page, @RequestParam int size) {
+        return teacherService.getUserPaginatedList(page, size);
     }
 
     @PatchMapping("/updateTeacherInfo")
@@ -61,18 +61,18 @@ public class TeacherController {
     }
 
     @DeleteMapping("/deleteTeacherInfo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_TEACHER")
-    public ResponseEntity<Teacher> deleteTeacherInfo() {
+    public void deleteTeacherInfo() {
         String email = authService.getAuthUserEmail();
         teacherService.deleteUser(email);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteTeacherInfo/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Teacher> deleteTeacherInfoById(@PathVariable long id) {
+    public void deleteTeacherInfoById(@PathVariable long id) {
         teacherService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

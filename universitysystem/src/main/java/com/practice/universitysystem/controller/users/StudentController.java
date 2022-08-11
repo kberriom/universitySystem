@@ -65,7 +65,7 @@ public class StudentController {
     }
 
     @DeleteMapping("deleteStudentInfo")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_STUDENT")
     public void deleteStudentInfo() {
         String email = authService.getAuthUserEmail();
@@ -73,7 +73,7 @@ public class StudentController {
     }
 
     @DeleteMapping("deleteStudentInfo/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
     public void deleteStudentInfoById(@PathVariable long id) {
         studentService.deleteUser(id);
