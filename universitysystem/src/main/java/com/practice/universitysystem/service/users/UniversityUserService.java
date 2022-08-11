@@ -1,14 +1,12 @@
 package com.practice.universitysystem.service.users;
 
-import com.practice.universitysystem.dto.PageInfoDto;
 import com.practice.universitysystem.dto.users.UserDto;
 import com.practice.universitysystem.model.users.UniversityUser;
 import com.practice.universitysystem.repository.users.UniversityUserRepository;
 import com.practice.universitysystem.service.AuthService;
+import com.practice.universitysystem.service.ServiceUtils;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.validation.*;
@@ -38,6 +36,8 @@ public abstract class UniversityUserService<D extends UserDto,M extends UserMapp
      * Concrete user instance repository.
      */
     private R instanceUserRepository;
+
+    private ServiceUtils<U, Long, R> serviceUtils;
 
     public U createUser(D userDto) {
         String encodedPassword = authService.getEncodedPassword(userDto.getUserPassword());
@@ -99,36 +99,13 @@ public abstract class UniversityUserService<D extends UserDto,M extends UserMapp
         return instanceUserRepository.findAll();
     }
 
-    public Page<U> getAllUsers(int page, int pageSize) {
-        return instanceUserRepository.findAll(PageRequest.of(page, pageSize));
-    }
-
     /**
      * @param page Desired page number, starts at 1
      * @param size total amount of pages
      * @return list containing current page info and the paginated list
      */
     public List<Object> getUserPaginatedList(int page, int size) {
-        page--;
-
-        if (page < 0) {
-            throw new IllegalArgumentException("Page number must not be less than 1");
-        }
-
-        List<U> userList = getAllUsers(page, size).toList();
-        int responseUserSize = userList.size();
-        List<Object> responseList = new ArrayList<>(responseUserSize +1);
-
-        PageInfoDto pageInfo = new PageInfoDto(page+1L, responseUserSize, maxPageNumberGiven(size));
-
-        responseList.add(pageInfo);
-        responseList.addAll(userList);
-        return responseList;
-    }
-
-    private long maxPageNumberGiven(long pageSize) {
-        long totalCount = instanceUserRepository.count();
-        return (long) Math.ceil((double) totalCount / pageSize);
+        return serviceUtils.getPaginatedList(page, size);
     }
 
 }
