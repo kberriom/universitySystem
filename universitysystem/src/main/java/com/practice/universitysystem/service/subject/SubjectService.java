@@ -4,18 +4,27 @@ import com.practice.universitysystem.dto.SubjectDto;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
+import com.practice.universitysystem.service.ServiceUtils;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.*;
+import java.util.List;
 import java.util.Set;
 
 @Service
 public class SubjectService {
 
-    @Autowired
     SubjectRepository subjectRepository;
+
+    ServiceUtils<Subject, Long, SubjectRepository> serviceUtils;
+
+    @Autowired
+    public SubjectService(SubjectRepository subjectRepository) {
+        this.subjectRepository = subjectRepository;
+        this.serviceUtils = new ServiceUtils<>(subjectRepository);
+    }
 
     private static final SubjectMapper mapper = Mappers.getMapper(SubjectMapper.class);
 
@@ -38,6 +47,14 @@ public class SubjectService {
         return subjectRepository.findByName(name).orElseThrow();
     }
 
+    public List<Subject> getAllSubjects() {
+        return subjectRepository.findAll();
+    }
+
+    public List<Object> getPaginatedSubjects(int page, int pageSize) {
+        return serviceUtils.getPaginatedList(page, pageSize);
+    }
+
     public Subject updateSubject(String name, SubjectDto subjectDto) {
         return subjectRepository.save(mapper.update(getSubject(name), subjectDto));
     }
@@ -47,6 +64,7 @@ public class SubjectService {
     }
 
     public void getAllStudents(String subjectName) {
+        Subject subject = getSubject(subjectName);
     }
 
     public void addStudent(Student student) {

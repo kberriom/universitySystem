@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/subject")
 public class SubjectController {
@@ -26,6 +28,18 @@ public class SubjectController {
     @ResponseStatus(HttpStatus.OK)
     public Subject getSubject(@RequestParam String name) {
         return subjectService.getSubject(name);
+    }
+
+    @GetMapping("/getAllSubjects")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Subject> getAllSubjects() {
+        return subjectService.getAllSubjects();
+    }
+
+    @GetMapping("/getAllSubjects/paged")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Object> getAllSubjectsPaged(@RequestParam int page, @RequestParam int size) {
+        return subjectService.getPaginatedSubjects(page, size);
     }
 
     @PatchMapping("/updateSubject/{name}")
