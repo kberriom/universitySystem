@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,11 +54,10 @@ class StudentTests {
         student.setEmail("test@testmail.com");
         student.setMobilePhone("1234567896");
         student.setLandPhone("1234567896");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        student.setBirthdate(dateFormat.parse("14-05-2000"));
+        student.setBirthdate(LocalDate.parse("2000-05-14"));
         student.setUsername("TEST_USERNAME");
         student.setUserPassword("TEST_PASSWORD");
-        student.setEnrollmentDate(new Date());
+        student.setEnrollmentDate(LocalDate.now());
         return student;
     }
 
@@ -104,7 +104,7 @@ class StudentTests {
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
-        subjectRegistration.setRegistrationDate(new Date());
+        subjectRegistration.setRegistrationDate(LocalDate.now());
         Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
         if (!constraintViolationsRegistration.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsRegistration);
@@ -141,7 +141,7 @@ class StudentTests {
         subjectRepository.save(subject);
 
         StudentSubjectRegistration subjectRegistration = new StudentSubjectRegistration(student.getId(), subject.getId());
-        subjectRegistration.setRegistrationDate(new Date());
+        subjectRegistration.setRegistrationDate(LocalDate.now());
         Set<ConstraintViolation<StudentSubjectRegistration>> constraintViolationsRegistration = validator.validate(subjectRegistration);
         if (!constraintViolationsRegistration.isEmpty()) {
             throw new ConstraintViolationException(constraintViolationsRegistration);
@@ -157,7 +157,7 @@ class StudentTests {
         Grade grade1 = new Grade();
         grade1.setDescription("GRADE_DESCRIPTION");
         grade1.setGradeValue(3.5);
-        grade1.setPercentageOfFinalGrade(50);
+        grade1.setPercentageOfFinalGrade(50D);
         grade1.setRegistrationId(subjectRegistration.getId());
         Set<ConstraintViolation<Grade>> constraintViolationsGrade1 = validator.validate(grade1);
         if (!constraintViolationsGrade1.isEmpty()) {
@@ -166,8 +166,8 @@ class StudentTests {
 
         Grade grade2 = new Grade();
         grade2.setDescription("GRADE_DESCRIPTION");
-        grade2.setGradeValue(5);
-        grade2.setPercentageOfFinalGrade(50);
+        grade2.setGradeValue(5D);
+        grade2.setPercentageOfFinalGrade(50D);
         grade2.setRegistrationId(subjectRegistration.getId());
         Set<ConstraintViolation<Grade>> constraintViolationsGrade2 = validator.validate(grade2);
         if (!constraintViolationsGrade2.isEmpty()) {

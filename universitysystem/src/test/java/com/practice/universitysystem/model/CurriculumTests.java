@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import javax.validation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,10 +46,8 @@ class CurriculumTests {
         Curriculum curriculum = new Curriculum();
         curriculum.setName("CURRICULUM_NAME");
         curriculum.setDescription("CURRICULUM_DESCRIPTION");
-        SimpleDateFormat dateFormatStart = new SimpleDateFormat("dd-MM-yyyy");
-        curriculum.setDateStart(dateFormatStart.parse("14-05-2000"));
-        SimpleDateFormat dateFormatEnd = new SimpleDateFormat("dd-MM-yyyy");
-        curriculum.setDateEnd(dateFormatEnd.parse("14-05-2001"));
+        curriculum.setDateStart(LocalDate.parse("2000-05-14"));
+        curriculum.setDateEnd(LocalDate.parse("2001-05-14"));
 
         Subject subject1 = getSubject("SUBJECT1");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject1 = validator.validate(subject1);
