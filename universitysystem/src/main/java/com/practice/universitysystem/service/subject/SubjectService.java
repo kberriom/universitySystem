@@ -79,8 +79,11 @@ public class SubjectService {
         return registrationRepository.save(subjectRegistration);
     }
 
-    public void removeStudent(Student student) {
-        //todo
+    public void removeStudent(Student student, String subjectName) {
+        StudentSubjectRegistrationId registrationId = new StudentSubjectRegistrationId();
+        registrationId.setStudentUserId(student.getId());
+        registrationId.setSubjectId(getSubject(subjectName).getId());
+        registrationRepository.deleteById(registrationId);
     }
 
     public void getAllTeachers() {

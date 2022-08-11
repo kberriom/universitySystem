@@ -75,4 +75,11 @@ public class SubjectController {
         return subjectService.addStudentToSubject(studentService.getUser(studentId), subjectName);
     }
 
+    @DeleteMapping("/removeStudent")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
+    public void removeStudent(@RequestParam Long studentId, @RequestParam String subjectName) {
+        subjectService.removeStudent(studentService.getUser(studentId), subjectName);
+    }
+
 }
