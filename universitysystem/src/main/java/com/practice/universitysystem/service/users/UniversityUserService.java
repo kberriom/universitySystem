@@ -7,9 +7,6 @@ import com.practice.universitysystem.repository.users.UniversityUserRepository;
 import com.practice.universitysystem.service.AuthService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,9 +21,11 @@ import java.util.*;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class UniversityUserService<D extends UserDto, U extends UniversityUser, R extends JpaRepository<U, Long>>{
+public abstract class UniversityUserService<D extends UserDto,M extends UserMapper<U, D>, U extends UniversityUser, R extends JpaRepository<U, Long>>{
 
     private AuthService authService;
+
+    private M mapper;
 
     /**
      * User instance patent repository.
@@ -39,16 +38,17 @@ public abstract class UniversityUserService<D extends UserDto, U extends Univers
      */
     private R instanceUserRepository;
 
-
-    public U createUser(U userDto) {
+    public U createUser(D userDto) {
         String encodedPassword = authService.getEncodedPassword(userDto.getUserPassword());
         userDto.setUserPassword(encodedPassword);
 
-        userDto.setEnrollmentDate(new Date());
+        U user = mapper.dtoToUser(userDto);
 
-        validateUser(userDto);
+        user.setEnrollmentDate(new Date());
 
-        return instanceUserRepository.save(userDto);
+        validateUser(user);
+
+        return instanceUserRepository.save(user);
     }
 
     public void validateUser(U user) {
@@ -71,53 +71,16 @@ public abstract class UniversityUserService<D extends UserDto, U extends Univers
     }
 
     public U updateUser(String email, D updateDto) {
-        U user = getUser(email);
-
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(new PropertyMap<D, U>() {
-            @Override
-            protected void configure() {
-                skip(source.getUsername());
-                destination.setUsername(user.getUsername());
-                skip(source.getEmail());
-                destination.setEmail(user.getEmail());
-                skip(source.getGovernmentId());
-                destination.setGovernmentId(user.getGovernmentId());
-                skip(source.getBirthdate());
-                destination.setBirthdate(user.getBirthdate());
-            }
-        });
-        modelMapper.getConfiguration().setSkipNullEnabled(true);
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-        modelMapper.map(updateDto, user);
-
+        U user = mapper.update(getUser(email), updateDto);
         validateUser(user);
         return instanceUserRepository.save(user);
     }
-
 
     /**
      * Admin update, can update birthdate and gov id
      */
     public U updateUser(long id, D updateDto) {
-        U user = getUser(id);
-
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(new PropertyMap<D, U>() {
-            @Override
-            protected void configure() {
-                skip().setUsername(source.getUsername());
-                skip().setEmail(source.getEmail());
-            }
-        });
-        modelMapper.getConfiguration().setSkipNullEnabled(true);
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-        modelMapper.map(updateDto, user);
-
+        U user = mapper.adminUpdate(getUser(id), updateDto);
         validateUser(user);
         return instanceUserRepository.save(user);
     }

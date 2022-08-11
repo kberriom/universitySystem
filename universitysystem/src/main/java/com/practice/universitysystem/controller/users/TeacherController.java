@@ -1,9 +1,9 @@
 package com.practice.universitysystem.controller.users;
 
-import com.practice.universitysystem.dto.users.teacher.TeacherDto;
+import com.practice.universitysystem.dto.users.TeacherDto;
 import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.service.AuthService;
-import com.practice.universitysystem.service.users.TeacherService;
+import com.practice.universitysystem.service.users.teacher.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

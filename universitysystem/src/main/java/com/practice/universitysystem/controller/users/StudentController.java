@@ -1,9 +1,9 @@
 package com.practice.universitysystem.controller.users;
 
-import com.practice.universitysystem.dto.users.student.StudentDto;
+import com.practice.universitysystem.dto.users.StudentDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.service.AuthService;
-import com.practice.universitysystem.service.users.StudentService;
+import com.practice.universitysystem.service.users.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;

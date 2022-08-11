@@ -1,6 +1,5 @@
-package com.practice.universitysystem.dto.users.teacher;
+package com.practice.universitysystem.dto.users;
 
-import com.practice.universitysystem.dto.users.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

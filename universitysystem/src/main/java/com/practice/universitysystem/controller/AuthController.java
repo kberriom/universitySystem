@@ -2,11 +2,13 @@ package com.practice.universitysystem.controller;
 
 import com.practice.universitysystem.dto.credentials.LoginCredentialsDto;
 import com.practice.universitysystem.dto.credentials.NewPasswordDto;
+import com.practice.universitysystem.dto.users.StudentDto;
+import com.practice.universitysystem.dto.users.TeacherDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.service.AuthService;
-import com.practice.universitysystem.service.users.StudentService;
-import com.practice.universitysystem.service.users.TeacherService;
+import com.practice.universitysystem.service.users.student.StudentService;
+import com.practice.universitysystem.service.users.teacher.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,7 @@ public class AuthController {
 
     @PostMapping("/createStudent")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Student> createStudent(@RequestBody Student userDto) {
+    public ResponseEntity<Student> createStudent(@RequestBody StudentDto userDto) {
 
         Student student = studentService.createUser(userDto);
 
@@ -41,7 +43,7 @@ public class AuthController {
 
     @PostMapping("/createTeacher")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher userDto) {
+    public ResponseEntity<Teacher> createTeacher(@RequestBody TeacherDto userDto) {
 
         Teacher teacher = teacherService.createUser(userDto);
 
