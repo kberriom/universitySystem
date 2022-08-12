@@ -2,7 +2,6 @@ package com.practice.universitysystem.service.subject;
 
 import com.practice.universitysystem.dto.SubjectDto;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
-import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistrationId;
 import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignation;
@@ -60,7 +59,9 @@ public class SubjectService {
     }
 
     public Subject updateSubject(String name, SubjectDto subjectDto) {
-        return subjectRepository.save(mapper.update(getSubject(name), subjectDto));
+        Subject update = mapper.update(getSubject(name), subjectDto);
+        subjectServiceUtils.validate(update);
+        return subjectRepository.save(update);
     }
 
     public void deleteSubject(String name) {
@@ -119,6 +120,7 @@ public class SubjectService {
         assignationId.setSubjectId(getSubject(subjectName).getId());
         TeacherAssignation teacherAssignation = teacherAssignationRepository.findById(assignationId).orElseThrow();
         teacherAssignation.setRoleInClass(roleInClass);
+        teacherAssignationServiceUtils.validate(teacherAssignation);
         return teacherAssignationRepository.save(teacherAssignation);
     }
 

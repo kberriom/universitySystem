@@ -57,6 +57,7 @@ public class CurriculumService {
 
     public Curriculum updateCurriculum(String name, CurriculumDto curriculumDto) {
         Curriculum curriculum =  mapper.update(getCurriculum(name), curriculumDto);
+        serviceUtilsCurriculum.validate(curriculum);
         return curriculumRepository.save(curriculum);
     }
 
