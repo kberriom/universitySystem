@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.validation.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -47,18 +46,9 @@ public abstract class UniversityUserService<D extends UserDto,M extends UserMapp
 
         user.setEnrollmentDate(LocalDate.now());
 
-        validateUser(user);
+        serviceUtils.validate(user);
 
         return instanceUserRepository.save(user);
-    }
-
-    public void validateUser(U user) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<U>> constraintViolations = validator.validate(user);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
-        }
     }
 
     public void deleteUser(String email) {
@@ -73,7 +63,7 @@ public abstract class UniversityUserService<D extends UserDto,M extends UserMapp
 
     public U updateUser(String email, D updateDto) {
         U user = mapper.update(getUser(email), updateDto);
-        validateUser(user);
+        serviceUtils.validate(user);
         return instanceUserRepository.save(user);
     }
 
@@ -82,7 +72,7 @@ public abstract class UniversityUserService<D extends UserDto,M extends UserMapp
      */
     public U updateUser(long id, D updateDto) {
         U user = mapper.adminUpdate(getUser(id), updateDto);
-        validateUser(user);
+        serviceUtils.validate(user);
         return instanceUserRepository.save(user);
     }
 

@@ -10,7 +10,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,17 +34,8 @@ public class CurriculumService {
 
     public Curriculum createCurriculum(CurriculumDto curriculumDto) {
         Curriculum curriculum = mapper.dtoToCurriculum(curriculumDto);
-        validateCurriculum(curriculum);
+        serviceUtilsCurriculum.validate(curriculum);
         return curriculumRepository.save(curriculum);
-    }
-
-    private void validateCurriculum(Curriculum curriculum) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<Curriculum>> constraintViolations = validator.validate(curriculum);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
-        }
     }
 
     public void deleteCurriculum(String name) {
