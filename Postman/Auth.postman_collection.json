@@ -1,0 +1,231 @@
+{
+	"info": {
+		"_postman_id": "09c6c027-8112-4b91-8941-bc825b494fa5",
+		"name": "Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createStudent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Alejandro\",\r\n    \"lastName\": \"FLorez\",\r\n    \"governmentId\": \"1235468246\",\r\n    \"email\": \"alejandro@studentmail.com\",\r\n    \"mobilePhone\": \"258741963\",\r\n    \"landPhone\": null,\r\n    \"birthdate\": \"1980-07-06\",\r\n    \"username\": \"alejandro\",\r\n    \"userPassword\": \"123456.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/createStudent",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"createStudent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login-mockStudent",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"alejandro@studentmail.com\",\r\n    \"password\": \"123456.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createTeacher",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Alfonso\",\r\n    \"lastName\": \"Montes\",\r\n    \"governmentId\": \"784874122351\",\r\n    \"email\": \"alfonzo@studentmail.com\",\r\n    \"mobilePhone\": \"84698433\",\r\n    \"birthdate\": \"1960-07-06\",\r\n    \"userPassword\": \"123456789.\",\r\n    \"username\": \"teacher1212233\",\r\n    \"department\": \"Systems\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/createTeacher",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"createTeacher"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login-mockTeacher",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"alfonzo@studentmail.com\",\r\n    \"password\": \"123456789.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatePassword",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"alfonzo@studentmail.com\",\r\n    \"oldPassword\": \"123456789.\",\r\n    \"newPassword\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/updatePassword",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"updatePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login-Admin",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@universitySystem.com\",\r\n    \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDMxMDgzNywiaWF0IjoxNjYwMzEwMjM3LCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.0Rp5_DuEOtbjuuqTJpqDPLt-RlJ3JO4Su8u1Z7TGiK0",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

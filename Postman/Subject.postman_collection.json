@@ -1,0 +1,406 @@
+{
+	"info": {
+		"_postman_id": "b6507455-d130-4118-9156-86031d110b59",
+		"name": "Subject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createSubject",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Calc 3\",\r\n    \"description\": \"Integral parcial\",\r\n    \"startDate\": \"2022-08-10\",\r\n    \"endDate\": \"2023-05-06\",\r\n    \"remote\": true,\r\n    \"onSite\": true,\r\n    \"roomLocation\": \"home\",\r\n    \"creditsValue\": 16\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/subject/createSubject",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"createSubject"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSubject",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/getSubject?name=Java",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"getSubject"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Java"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllSubjects",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/getAllSubjects",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"getAllSubjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllSubjects Paged",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/getAllSubjects/paged?page=1&size=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"getAllSubjects",
+						"paged"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateSubject",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startDate\": \"2022-12-31\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/subject/updateSubject/Java",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"updateSubject",
+						"Java"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteSubject",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/deleteSubject?name=Java",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"deleteSubject"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Java"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addStudent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/subject/addStudent?studentId=33&subjectName=Java",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"addStudent"
+					],
+					"query": [
+						{
+							"key": "studentId",
+							"value": "33"
+						},
+						{
+							"key": "subjectName",
+							"value": "Java"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllRegisteredStudents",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/getAllRegisteredStudents/Java",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"getAllRegisteredStudents",
+						"Java"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeStudent",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/removeStudent?subjectName=Java&studentId=25",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"removeStudent"
+					],
+					"query": [
+						{
+							"key": "subjectName",
+							"value": "Java"
+						},
+						{
+							"key": "studentId",
+							"value": "25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addTeacher",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/addTeacher?teacherId=26&subjectName=Java&roleInClass=Profesor encargado",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"addTeacher"
+					],
+					"query": [
+						{
+							"key": "teacherId",
+							"value": "26"
+						},
+						{
+							"key": "subjectName",
+							"value": "Java"
+						},
+						{
+							"key": "roleInClass",
+							"value": "Profesor encargado"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTeachers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/getAllTeachers/Java",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"getAllTeachers",
+						"Java"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "modifyTeacherRole",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/modifyTeacherRole?teacherId=26&subjectName=Java&roleInClass=Profesor temporal",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"modifyTeacherRole"
+					],
+					"query": [
+						{
+							"key": "teacherId",
+							"value": "26"
+						},
+						{
+							"key": "subjectName",
+							"value": "Java"
+						},
+						{
+							"key": "roleInClass",
+							"value": "Profesor temporal"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeTeacher",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subject/removeTeacher?subjectName=Java&teacherId=26",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subject",
+						"removeTeacher"
+					],
+					"query": [
+						{
+							"key": "subjectName",
+							"value": "Java"
+						},
+						{
+							"key": "teacherId",
+							"value": "26"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDMzMjIwMSwiaWF0IjoxNjYwMzMxNjAxLCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.zYO28hHj6GLVL6z9n4qbpe5s8k_2yK8Wz3qW9Nw9oWg",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

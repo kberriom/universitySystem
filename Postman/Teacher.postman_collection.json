@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "468d8862-17cc-4f9d-b522-c86d6878aacc",
+		"name": "Teacher",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getTeacher",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMzI0OSwiaWF0IjoxNjYwMjMyNjQ5LCJlbWFpbCI6ImFsZm9uem9Ac3R1ZGVudG1haWwuY29tIn0.uYcEg5oQqD8Exr5Gkr06w6xbkGFHP5AOpmLNJmbXthc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/teacher/getTeacherInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"getTeacherInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTeacherAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY1OTk5MTg4NiwiaWF0IjoxNjU5OTkxMjg2LCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.uJGM7cGF6dFJCqJ6mGO9h6kqUYdOO0I3zSG3UrWtDq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/teacher/getTeacherInfo/12",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"getTeacherInfo",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTeacherAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDI1ODE4MiwiaWF0IjoxNjYwMjU3NTgyLCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.0hif2XHeY4E8kRUojlMyI1TfKWkvwDzWO11y6CVheWY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/teacher/getAllTeacherInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"getAllTeacherInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTeacherAdmin paged",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzODI2OSwiaWF0IjoxNjYwMjM3NjY5LCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.HwKemMaFJ4CFqcfyb34ozrhcISpM8euGaCDHjqaREfQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/teacher/getAllTeacherInfo/paged?page=1&size=3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"getAllTeacherInfo",
+						"paged"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateTeacher",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMzI0OSwiaWF0IjoxNjYwMjMyNjQ5LCJlbWFpbCI6ImFsZm9uem9Ac3R1ZGVudG1haWwuY29tIn0.uYcEg5oQqD8Exr5Gkr06w6xbkGFHP5AOpmLNJmbXthc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test Teacher\",\r\n    \"lastName\": \"Last Names\",\r\n    \"landPhone\": \"0000000\",\r\n    \"mobilePhone\": \"000000\",\r\n    \"department\": \"Test department\",\r\n    \"userPassword\": \"nononononono\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/teacher/updateTeacherInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"updateTeacherInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateTeacherAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMjg5NSwiaWF0IjoxNjYwMjMyMjk1LCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.TIUmOOGnaPAansf7aHzTiZV6iSztWoVL4Fot-OVUSn4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test Teacher\",\r\n    \"lastName\": \"Last Names\",\r\n    \"landPhone\": \"123456789\",\r\n    \"mobilePhone\": \"84698433\",\r\n    \"department\": \"TTTTTTTTT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/teacher/updateTeacherInfo/24",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"updateTeacherInfo",
+						"24"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTeacher",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMzI0OSwiaWF0IjoxNjYwMjMyNjQ5LCJlbWFpbCI6ImFsZm9uem9Ac3R1ZGVudG1haWwuY29tIn0.uYcEg5oQqD8Exr5Gkr06w6xbkGFHP5AOpmLNJmbXthc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/teacher/deleteTeacherInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"deleteTeacherInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTeacherAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMjg5NSwiaWF0IjoxNjYwMjMyMjk1LCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.TIUmOOGnaPAansf7aHzTiZV6iSztWoVL4Fot-OVUSn4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/teacher/deleteTeacherInfo/24",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"teacher",
+						"deleteTeacherInfo",
+						"24"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

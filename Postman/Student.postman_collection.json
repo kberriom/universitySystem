@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "5f1987d5-455e-4590-ad3b-0d16e347debd",
+		"name": "Student",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getStudent",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMzA1MSwiaWF0IjoxNjYwMjMyNDUxLCJlbWFpbCI6ImFsYmVydG9Ac3R1ZGVudG1haWwuY29tIn0.ARgx9Wm7dzG7q_MBNCRdA_69BEdKlskgjWS6Lcz92M8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/getStudentInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"getStudentInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getStudentAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDI1MDIxMSwiaWF0IjoxNjYwMjQ5NjExLCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.W0jgJnJ2frqDM4_RwzyelUfao9Pp21km1P7dk-ML6CA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/getStudentInfo/25",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"getStudentInfo",
+						"25"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllStudentAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDMzMjIwMSwiaWF0IjoxNjYwMzMxNjAxLCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.zYO28hHj6GLVL6z9n4qbpe5s8k_2yK8Wz3qW9Nw9oWg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/getAllStudentInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"getAllStudentInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllStudentAdmin paged",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzODI2OSwiaWF0IjoxNjYwMjM3NjY5LCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.HwKemMaFJ4CFqcfyb34ozrhcISpM8euGaCDHjqaREfQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/getAllStudentInfo/paged?page=1&size=3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"getAllStudentInfo",
+						"paged"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateStudent",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMzA1MSwiaWF0IjoxNjYwMjMyNDUxLCJlbWFpbCI6ImFsYmVydG9Ac3R1ZGVudG1haWwuY29tIn0.ARgx9Wm7dzG7q_MBNCRdA_69BEdKlskgjWS6Lcz92M8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"SI\",\r\n    \"lastName\": \"SI\",\r\n    \"governmentId\": \"nnnnnnnnnnnnnnnn\",\r\n    \"email\": \"nnnnnnnnnn@studentmail.com\",\r\n    \"mobilePhone\": \"0000000\",\r\n    \"landPhone\": \"00000\",\r\n    \"birthdate\": \"2000-07-06\",\r\n    \"username\": \"nnnnnnnnnnn\",\r\n    \"userPassword\": \"nnnnnnnnnnnnn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/student/updateStudentInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"updateStudentInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateStudentAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIyNzYyMiwiaWF0IjoxNjYwMjI3MDIyLCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.0hV2Y0pun-ueGcd2hqozxwM5BUNH2lJFI7dSQfHF5KQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"SI\",\r\n    \"lastName\": \"SI\",\r\n    \"governmentId\": \"nnnnnnnnnnnnnnnn\",\r\n    \"email\": \"nnnnnnnnnn@studentmail.com\",\r\n    \"mobilePhone\": \"0000000\",\r\n    \"landPhone\": \"00000\",\r\n    \"birthdate\": \"2000-07-06\",\r\n    \"username\": \"nnnnnnnnnnn\",\r\n    \"userPassword\": \"nnnnnnnnnnnnn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/student/updateStudentInfo/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"updateStudentInfo",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteStudent",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMzA1MSwiaWF0IjoxNjYwMjMyNDUxLCJlbWFpbCI6ImFsYmVydG9Ac3R1ZGVudG1haWwuY29tIn0.ARgx9Wm7dzG7q_MBNCRdA_69BEdKlskgjWS6Lcz92M8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/deleteStudentInfo",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"deleteStudentInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteStudentAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDIzMjg5NSwiaWF0IjoxNjYwMjMyMjk1LCJlbWFpbCI6ImFkbWluQHVuaXZlcnNpdHlTeXN0ZW0uY29tIn0.TIUmOOGnaPAansf7aHzTiZV6iSztWoVL4Fot-OVUSn4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/deleteStudentInfo/23",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"deleteStudentInfo",
+						"23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getMyGrade",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVU0VSIERFVEFJTFMiLCJpc3MiOiJVTklWRVJTSVRZX1NZU1RFTSIsImV4cCI6MTY2MDMzMjc1OCwiaWF0IjoxNjYwMzMyMTU4LCJlbWFpbCI6ImpvcmdlQHN0dWRlbnRtYWlsLmNvbSJ9.M5MqGD0xXq6_0HnfhgpoQpH1W3abjh4DSTAgfSaxDpQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/grade/getMyGrade/Java",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"grade",
+						"getMyGrade",
+						"Java"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
