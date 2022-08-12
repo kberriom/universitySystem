@@ -1,5 +1,6 @@
 package com.practice.universitysystem.model.curriculum.subject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistrationId;
 import lombok.Data;
 
@@ -26,6 +27,7 @@ public class Grade {
     private Double percentageOfFinalGrade;
 
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private StudentSubjectRegistrationId registrationId;
 
     @NotNull
