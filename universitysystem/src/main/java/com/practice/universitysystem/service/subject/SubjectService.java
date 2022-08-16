@@ -10,12 +10,15 @@ import com.practice.universitysystem.repository.curriculum.subject.SubjectReposi
 import com.practice.universitysystem.repository.users.student.student_subject.StudentSubjectRegistrationRepository;
 import com.practice.universitysystem.repository.users.teacher.teacher_assignation.TeacherAssignationRepository;
 import com.practice.universitysystem.service.ServiceUtils;
+import com.practice.universitysystem.service.users.student.StudentService;
+import com.practice.universitysystem.service.users.teacher.TeacherService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class SubjectService {
@@ -23,16 +26,21 @@ public class SubjectService {
     SubjectRepository subjectRepository;
     StudentSubjectRegistrationRepository registrationRepository;
     TeacherAssignationRepository teacherAssignationRepository;
+    StudentService studentService;
+    TeacherService teacherService;
 
     ServiceUtils<Subject, Long, SubjectRepository> subjectServiceUtils;
     ServiceUtils<StudentSubjectRegistration, StudentSubjectRegistrationId, StudentSubjectRegistrationRepository> registrationServiceUtils;
     ServiceUtils<TeacherAssignation, TeacherAssignationId, TeacherAssignationRepository> teacherAssignationServiceUtils;
 
     @Autowired
-    public SubjectService(SubjectRepository subjectRepository, StudentSubjectRegistrationRepository registrationRepository, TeacherAssignationRepository teacherAssignationRepository) {
+    public SubjectService(SubjectRepository subjectRepository, StudentSubjectRegistrationRepository registrationRepository
+            , TeacherAssignationRepository teacherAssignationRepository, StudentService studentService, TeacherService teacherService) {
         this.registrationRepository = registrationRepository;
         this.teacherAssignationRepository = teacherAssignationRepository;
         this.subjectRepository = subjectRepository;
+        this.studentService = studentService;
+        this.teacherService = teacherService;
         subjectServiceUtils = new ServiceUtils<>(subjectRepository);
         registrationServiceUtils = new ServiceUtils<>(registrationRepository);
         teacherAssignationServiceUtils = new ServiceUtils<>(teacherAssignationRepository);
@@ -47,7 +55,8 @@ public class SubjectService {
     }
 
     public Subject getSubject(String name) {
-        return subjectRepository.findByName(name).orElseThrow();
+        return subjectRepository.findByName(name).
+                orElseThrow(()->new NoSuchElementException("Unable to find a Subject with name: " + name));
     }
 
     public List<Subject> getAllSubjects() {
@@ -74,6 +83,9 @@ public class SubjectService {
     }
 
     public StudentSubjectRegistration addStudentToSubject(Long studentId, String subjectName) {
+
+        studentService.getUser(studentId);
+
         StudentSubjectRegistration subjectRegistration =
                 new StudentSubjectRegistration(studentId, getSubject(subjectName).getId());
 
@@ -88,7 +100,9 @@ public class SubjectService {
         StudentSubjectRegistrationId registrationId = new StudentSubjectRegistrationId();
         registrationId.setStudentUserId(studentId);
         registrationId.setSubjectId(getSubject(subjectName).getId());
-        registrationRepository.deleteById(registrationId);
+        StudentSubjectRegistration subjectRegistration = registrationRepository.findById(registrationId).
+                orElseThrow(()-> new NoSuchElementException("Unable to find Student registration with " + registrationId));
+        registrationRepository.delete(subjectRegistration);
     }
 
     public List<TeacherAssignation> getAllTeachers(String subjectName) {
@@ -97,6 +111,9 @@ public class SubjectService {
     }
 
     public TeacherAssignation addTeacherToSubject(Long teacherId, String subjectName, String roleInClass) {
+
+        teacherService.getUser(teacherId);
+
         TeacherAssignation teacherAssignation =
                 new TeacherAssignation(teacherId, getSubject(subjectName).getId());
 
@@ -111,14 +128,17 @@ public class SubjectService {
         TeacherAssignationId assignationId = new TeacherAssignationId();
         assignationId.setTeacherUserId(teacherId);
         assignationId.setSubjectId(getSubject(subjectName).getId());
-        teacherAssignationRepository.deleteById(assignationId);
+        TeacherAssignation teacherAssignation = teacherAssignationRepository.findById(assignationId).
+                orElseThrow(()->new NoSuchElementException("Unable to find a teacher registration with " + assignationId));
+        teacherAssignationRepository.delete(teacherAssignation);
     }
 
     public TeacherAssignation modifyTeacherRoleInSubject(Long teacherId, String subjectName, String roleInClass) {
         TeacherAssignationId assignationId = new TeacherAssignationId();
         assignationId.setTeacherUserId(teacherId);
         assignationId.setSubjectId(getSubject(subjectName).getId());
-        TeacherAssignation teacherAssignation = teacherAssignationRepository.findById(assignationId).orElseThrow();
+        TeacherAssignation teacherAssignation = teacherAssignationRepository.findById(assignationId).
+                orElseThrow(()->new NoSuchElementException("Unable to find a teacher registration with " + assignationId));
         teacherAssignation.setRoleInClass(roleInClass);
         teacherAssignationServiceUtils.validate(teacherAssignation);
         return teacherAssignationRepository.save(teacherAssignation);

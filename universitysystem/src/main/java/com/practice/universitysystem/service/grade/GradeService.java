@@ -5,26 +5,32 @@ import com.practice.universitysystem.model.curriculum.subject.Grade;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistrationId;
 import com.practice.universitysystem.repository.curriculum.subject.GradeRepository;
+import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
 import com.practice.universitysystem.repository.users.student.student_subject.StudentSubjectRegistrationRepository;
 import com.practice.universitysystem.service.ServiceUtils;
+import com.practice.universitysystem.service.users.student.StudentService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
 public class GradeService {
 
     GradeRepository gradeRepository;
+    SubjectRepository subjectRepository;
     StudentSubjectRegistrationRepository registrationRepository;
+    StudentService studentService;
     ServiceUtils<Grade, Long, GradeRepository> gradeServiceUtils;
     ServiceUtils<StudentSubjectRegistration, StudentSubjectRegistrationId, StudentSubjectRegistrationRepository> registrationServiceUtils;
     private final GradeMapper mapper = Mappers.getMapper(GradeMapper.class);
 
-    public GradeService(GradeRepository gradeRepository, StudentSubjectRegistrationRepository registrationRepository) {
+    public GradeService(GradeRepository gradeRepository, StudentSubjectRegistrationRepository registrationRepository, SubjectRepository subjectRepository) {
         this.gradeRepository = gradeRepository;
+        this.subjectRepository = subjectRepository;
         this.registrationRepository = registrationRepository;
         gradeServiceUtils = new ServiceUtils<>(gradeRepository);
         registrationServiceUtils = new ServiceUtils<>(registrationRepository);
@@ -91,17 +97,23 @@ public class GradeService {
         registrationId.setSubjectId(subjectId);
         registrationId.setStudentUserId(studentId);
 
-        return registrationRepository.findById(registrationId).orElseThrow();
+        return registrationRepository.findById(registrationId).orElseThrow(() ->
+                new NoSuchElementException("Could not find a registration with Student id: " + studentId + " and Subject id: " + subjectId));
+    }
+
+    private Grade getGradeById(Long gradeId) {
+        return gradeRepository.findById(gradeId).orElseThrow(() ->
+                new NoSuchElementException("Could not find a grade with id: " + gradeId));
     }
 
     public StudentSubjectRegistration modifyStudentGrade(Long subjectId, Long studentId, Long gradeId, GradeDto gradeDto) {
-        Grade grade = gradeRepository.findById(gradeId).orElseThrow();
+        Grade grade = getGradeById(gradeId);
         grade = mapper.update(grade, gradeDto);
         gradeServiceUtils.validate(grade);
 
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
 
-        subjectRegistration.getSubjectGrades().remove(gradeRepository.findById(gradeId).orElseThrow());
+        subjectRegistration.getSubjectGrades().remove(getGradeById(gradeId));
 
         verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade);
 
@@ -113,7 +125,7 @@ public class GradeService {
 
     public void removeStudentGrade(Long subjectId, Long studentId, Long gradeId) {
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
-        Grade grade = gradeRepository.findById(gradeId).orElseThrow();
+        Grade grade = getGradeById(gradeId);
 
         subjectRegistration.getSubjectGrades().remove(grade);
         registrationRepository.save(subjectRegistration);
@@ -122,6 +134,9 @@ public class GradeService {
     }
 
     public List<Set<Grade>> getAllStudentAllGradesInSubject(Long subjectId) {
+        if (!subjectRepository.existsById(subjectId)) {
+            throw new NoSuchElementException("Could not find a subject with subjectId: " + subjectId);
+        }
         return registrationRepository.findAllBySubjectId(subjectId)
                 .stream().map(StudentSubjectRegistration::getSubjectGrades).toList();
     }

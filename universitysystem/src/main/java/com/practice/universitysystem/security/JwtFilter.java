@@ -2,6 +2,8 @@ package com.practice.universitysystem.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.practice.universitysystem.security.service.UserDetailsServiceImp;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,11 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsServiceImp userDetailsService;
     private final JwtUtil jwtUtil;
 
+    @Autowired
     public JwtFilter(UserDetailsServiceImp userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
@@ -49,8 +53,8 @@ public class JwtFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
 
-                } catch (JWTVerificationException e) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT token");
+                } catch (JWTVerificationException e){
+                    log.error(e.getLocalizedMessage());
                 }
             }
         }

@@ -77,12 +77,13 @@ public abstract class UniversityUserService<D extends UserDto,M extends UserMapp
     }
 
     public U getUser(String email) {
-        Optional<U> user = instanceUserRepository.findById(userRepository.findByEmail(email).orElseThrow().getId());
-        return user.orElseThrow();
+        Optional<U> user = instanceUserRepository.findById(userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("Unable to find User with email: " + email)).getId());
+        return user.orElseThrow(() -> new NoSuchElementException("Unable to find User"));
     }
 
     public U getUser(long id) {
-        return instanceUserRepository.findById(id).orElseThrow();
+        return instanceUserRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Unable to find User with id: " + id));
     }
 
     public List<U> getAllUsers() {
