@@ -37,7 +37,7 @@ public class Curriculum {
     private LocalDate dateEnd;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "curriculum_subjects",
             joinColumns = @JoinColumn(name = "curriculum_id"),

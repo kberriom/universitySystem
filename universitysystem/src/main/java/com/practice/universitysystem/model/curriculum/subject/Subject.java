@@ -49,7 +49,7 @@ public class Subject {
     private Integer creditsValue;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     Set<Curriculum> curriculumsContainingSubject;
 
     /*
