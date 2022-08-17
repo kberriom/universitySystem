@@ -27,7 +27,6 @@ public abstract class UserDto {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDate birthdate;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String userPassword;
 
     private String username;

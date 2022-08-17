@@ -14,6 +14,7 @@ public interface StudentMapper extends UserMapper<Student, StudentDto> {
 
     @BeanMapping(nullValuePropertyMappingStrategy =  NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mapping(target = "userPassword", ignore = true)
     Student adminUpdate(@MappingTarget Student student, StudentDto studentDto);
 
 
