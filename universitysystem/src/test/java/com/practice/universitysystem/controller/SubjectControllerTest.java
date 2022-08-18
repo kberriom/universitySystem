@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.practice.universitysystem.dto.SubjectDto;
 import com.practice.universitysystem.dto.users.StudentDto;
 import com.practice.universitysystem.dto.users.TeacherDto;
+import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.model.users.UniversityUser;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.model.users.teacher.Teacher;
@@ -45,46 +46,46 @@ class SubjectControllerTest {
             .build();
     private final ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 
+    int generatedSubjectCount = 0;
+
     SubjectDto initSubject() {
+        generatedSubjectCount++;
         SubjectDto subjectDto = new SubjectDto();
-        subjectDto.setName("test subject");
-        subjectDto.setDescription("test description");
-        subjectDto.setStartDate(LocalDate.parse("2026-05-14"));
-        subjectDto.setEndDate(LocalDate.parse("2027-05-14"));
+        subjectDto.setName("test subject" + generatedSubjectCount);
+        subjectDto.setDescription("test " + generatedSubjectCount + " description");
+        subjectDto.setStartDate(LocalDate.parse("2026-05-"+Math.min(14+generatedSubjectCount, 30)));
+        subjectDto.setEndDate(LocalDate.parse("2027-06-"+Math.min(14+generatedSubjectCount, 30)));
         subjectDto.setRemote(true);
         subjectDto.setOnSite(true);
-        subjectDto.setRoomLocation("18-302");
-        subjectDto.setCreditsValue(26);
-
+        subjectDto.setRoomLocation("18-30"+generatedSubjectCount);
+        subjectDto.setCreditsValue(generatedSubjectCount+3);
         return subjectDto;
+    }
+
+    Subject createSubject(SubjectDto subjectDto) throws Exception {
+        String requestJson=ow.writeValueAsString(subjectDto);
+        log.info(requestJson);
+        MvcResult result = this.mockMvc.perform(post("/subject/createSubject")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+        log.info(result.getResponse().getContentAsString());
+        return mapper.readValue(result.getResponse().getContentAsString(), Subject.class);
     }
 
     @Test
     @Transactional
     void shouldCreateSubject() throws Exception {
         SubjectDto subjectDto = initSubject();
-        String requestJson=ow.writeValueAsString(subjectDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Subject subject = createSubject(subjectDto);
     }
 
     @Test
     @Transactional
     void shouldGetSubject() throws Exception {
         SubjectDto subjectDto = initSubject();
-        String requestJson=ow.writeValueAsString(subjectDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Subject subject = createSubject(subjectDto);
 
         MvcResult result = this.mockMvc.perform(get("/subject/getSubject")
                         .contentType(APPLICATION_JSON)
@@ -98,33 +99,10 @@ class SubjectControllerTest {
     @Transactional
     void shouldGetAllSubjectsAndPaged() throws Exception {
         SubjectDto subjectDto = initSubject();
+        Subject subject = createSubject(subjectDto);
 
-        SubjectDto subjectDto2 = new SubjectDto();
-        subjectDto2.setName("test subject 2");
-        subjectDto2.setDescription("test description");
-        subjectDto2.setStartDate(LocalDate.parse("2026-05-14"));
-        subjectDto2.setEndDate(LocalDate.parse("2027-05-14"));
-        subjectDto2.setRemote(true);
-        subjectDto2.setOnSite(true);
-        subjectDto2.setRoomLocation("18-203");
-        subjectDto2.setCreditsValue(20);
-
-        String requestJson=ow.writeValueAsString(subjectDto);
-        String requestJson2=ow.writeValueAsString(subjectDto2);
-
-        log.info(requestJson);
-        log.info(requestJson2);
-
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson2))
-                .andExpect(status().is2xxSuccessful());
+        SubjectDto subjectDto2 = initSubject();
+        Subject subject2 = createSubject(subjectDto2);
 
         MvcResult result = this.mockMvc.perform(get("/subject/getAllSubjects"))
                 .andExpect(status().is2xxSuccessful()).andReturn();
@@ -143,15 +121,7 @@ class SubjectControllerTest {
     @Transactional
     void shouldUpdateSubject() throws Exception {
         SubjectDto subjectDto = initSubject();
-        String requestJson=ow.writeValueAsString(subjectDto);
-        log.info(requestJson);
-
-        MvcResult result = this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful()).andReturn();
-        log.info(result.getResponse().getContentAsString());
+        Subject subject = createSubject(subjectDto);
 
         SubjectDto subjectDtoUpdate = new SubjectDto();
         subjectDtoUpdate.setName("test subject updated");
@@ -173,14 +143,7 @@ class SubjectControllerTest {
     @Transactional
     void shouldDeleteSubject() throws Exception {
         SubjectDto subjectDto = initSubject();
-        String requestJson=ow.writeValueAsString(subjectDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Subject subject = createSubject(subjectDto);
 
         this.mockMvc.perform(delete("/subject/deleteSubject")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
@@ -192,15 +155,7 @@ class SubjectControllerTest {
     @Transactional
     void shouldGetAllRegisteredStudents() throws Exception {
         SubjectDto subjectDto = initSubject();
-        String requestJson=ow.writeValueAsString(subjectDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
-
+        Subject subject = createSubject(subjectDto);
 
         MvcResult result = this.mockMvc.perform(get("/subject/getAllRegisteredStudents/{subjectName}", subjectDto.getName())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
@@ -215,14 +170,7 @@ class SubjectControllerTest {
     @Transactional
     void shouldAddAndRemoveStudent() throws Exception {
         SubjectDto subjectDto = initSubject();
-        String requestJson=ow.writeValueAsString(subjectDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Subject subject = createSubject(subjectDto);
 
         StudentDto studentDto = new StudentDto();
         studentDto.setName("teststudent");
@@ -235,7 +183,6 @@ class SubjectControllerTest {
         studentDto.setUsername("teststudent");
 
         String requestJsonStudent =ow.writeValueAsString(studentDto);
-
         log.info(requestJsonStudent);
 
         MvcResult result = this.mockMvc.perform(post("/auth/createStudent")
@@ -266,14 +213,7 @@ class SubjectControllerTest {
     @Transactional
     void shouldAddThenGetAllAndDeleteTeacher() throws Exception {
         SubjectDto subjectDto = initSubject();
-        String requestJson=ow.writeValueAsString(subjectDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/subject/createSubject")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Subject subject = createSubject(subjectDto);
 
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setName("testteacher");
