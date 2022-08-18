@@ -3,6 +3,7 @@ package com.practice.universitysystem.model;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignation;
 import com.practice.universitysystem.model.users.teacher.Teacher;
+import com.practice.universitysystem.model.users.teacher.teacher_asignation.TeacherAssignationId;
 import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
 import com.practice.universitysystem.repository.users.teacher.teacher_assignation.TeacherAssignationRepository;
 import com.practice.universitysystem.repository.users.teacher.TeacherRepository;
@@ -12,16 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 class TeacherTests {
@@ -60,7 +63,6 @@ class TeacherTests {
     @Test
     @Transactional
     void createAndDeleteTeacherTest() throws ParseException {
-        assertEquals(0, teacherRepository.count());
 
         Teacher teacher = getTeacher();
         Set<ConstraintViolation<Teacher>> constraintViolations = validator.validate(teacher);
@@ -69,18 +71,15 @@ class TeacherTests {
         }
 
         teacherRepository.save(teacher);
+        assertThat(teacherRepository.findById(teacher.getId()).orElseThrow(), is(teacher));
 
-        assertEquals(1, teacherRepository.count());
         teacherRepository.delete(teacher);
-        assertEquals(0, teacherRepository.count());
+        assertThat(teacherRepository.findById(teacher.getId()).isPresent(), is(false));
     }
 
     @Test
     @Transactional
     void assignTeacherTest() throws ParseException {
-        assertEquals(0, teacherRepository.count());
-        assertEquals(0, subjectRepository.count());
-        assertEquals(0, teacherAssignationRepository.count());
 
         Teacher teacher = getTeacher();
         Set<ConstraintViolation<Teacher>> constraintViolationsTeacher = validator.validate(teacher);
@@ -103,11 +102,13 @@ class TeacherTests {
             throw new ConstraintViolationException(constraintViolationsAssignation);
         }
 
-        assertFalse(teacherAssignationRepository.existsById(assignation.getId()));
+        assertThat(teacherAssignationRepository.existsById(assignation.getId()), is(false));
 
         teacherAssignationRepository.save(assignation);
 
-        assertEquals(1, teacherAssignationRepository.count());
-
+        TeacherAssignationId teacherAssignationId = new TeacherAssignationId();
+        teacherAssignationId.setTeacherUserId(teacher.getId());
+        teacherAssignationId.setSubjectId(subject.getId());
+        assertThat(teacherAssignationRepository.findById(teacherAssignationId).orElseThrow(), is(assignation));
     }
 }

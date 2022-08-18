@@ -10,15 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 class CurriculumTests {
@@ -40,9 +45,6 @@ class CurriculumTests {
     @Test
     @Transactional
     void createAndDeleteCurriculum() throws ParseException {
-        assertEquals(0, curriculumRepository.count());
-        assertEquals(0, subjectRepository.count());
-
         Curriculum curriculum = new Curriculum();
         curriculum.setName("CURRICULUM_NAME");
         curriculum.setDescription("CURRICULUM_DESCRIPTION");
@@ -63,7 +65,8 @@ class CurriculumTests {
         }
         subjectRepository.save(subject2);
 
-        assertEquals(2, subjectRepository.count());
+        assertThat(subjectRepository.findByName("SUBJECT1").orElseThrow(), is(subject1));
+        assertThat(subjectRepository.findByName("SUBJECT2").orElseThrow(), is(subject2));
 
         curriculum.setSubjects(new HashSet<>());
 
@@ -77,9 +80,9 @@ class CurriculumTests {
 
         curriculumRepository.save(curriculum);
 
-        assertEquals(1, curriculumRepository.count());
-        assertEquals(2, curriculumRepository.getReferenceById(curriculum.getId()).getSubjects().size());
+        assertThat(curriculumRepository.findByName("CURRICULUM_NAME").orElseThrow(), is(curriculum));
 
+        assertThat(curriculumRepository.getReferenceById(curriculum.getId()).getSubjects().size(), is(2));
     }
 
 }
