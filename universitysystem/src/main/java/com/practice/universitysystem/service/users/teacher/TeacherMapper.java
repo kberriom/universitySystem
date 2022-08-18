@@ -15,6 +15,7 @@ public interface TeacherMapper extends UserMapper<Teacher, TeacherDto> {
     @BeanMapping(nullValuePropertyMappingStrategy =  NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "userPassword", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Teacher adminUpdate(@MappingTarget Teacher teacher, TeacherDto teacherDto);
 
 
@@ -25,5 +26,6 @@ public interface TeacherMapper extends UserMapper<Teacher, TeacherDto> {
     @Mapping(target = "birthdate", ignore = true)
     @Mapping(target = "userPassword", ignore = true)
     @Mapping(target = "username", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Teacher update(@MappingTarget Teacher teacher, TeacherDto teacherDto);
 }
