@@ -82,11 +82,12 @@ public class GradeService {
 
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
 
-        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade);
-
         if (subjectRegistration.getSubjectGrades() == null) {
             subjectRegistration.setSubjectGrades(new HashSet<>());
         }
+        
+        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade);
+
         grade = gradeRepository.save(grade);
         subjectRegistration.getSubjectGrades().add(grade);
         return registrationRepository.save(subjectRegistration);
