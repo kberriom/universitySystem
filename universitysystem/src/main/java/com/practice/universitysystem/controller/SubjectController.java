@@ -86,7 +86,7 @@ public class SubjectController {
         return subjectService.getAllTeachers(subjectName);
     }
 
-    @PostMapping("/addTeacher")
+    @PutMapping("/addTeacher")
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_ADMIN")
     public TeacherAssignation addTeacherToSubject(@RequestParam Long teacherId, @RequestParam String subjectName, @RequestParam String roleInClass) {
