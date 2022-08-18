@@ -23,9 +23,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return manageError(ex, HttpStatus.NOT_FOUND, webRequest);
     }
 
-    @ExceptionHandler(value = {IllegalStateException.class, IllegalArgumentException.class})
+    @ExceptionHandler(value = {IllegalArgumentException.class})
     protected ResponseEntity<Object> handleGenericInvalid(RuntimeException ex, WebRequest webRequest) {
         return manageError(ex, HttpStatus.BAD_REQUEST, webRequest);
+    }
+
+    @ExceptionHandler(value = {IllegalStateException.class})
+    protected ResponseEntity<Object> handleGenericConflict(RuntimeException ex, WebRequest webRequest) {
+        return manageError(ex, HttpStatus.CONFLICT, webRequest);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

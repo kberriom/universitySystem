@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class SubjectService {
@@ -85,6 +86,15 @@ public class SubjectService {
     public StudentSubjectRegistration addStudentToSubject(Long studentId, String subjectName) {
 
         studentService.getUser(studentId);
+        long subjectId = getSubject(subjectName).getId();
+
+        StudentSubjectRegistrationId posibleExistingRegistration = new StudentSubjectRegistrationId();
+        posibleExistingRegistration.setSubjectId(subjectId);
+        posibleExistingRegistration.setStudentUserId(studentId);
+        Optional<StudentSubjectRegistration> posibleRegistration = registrationRepository.findById(posibleExistingRegistration);
+        if (posibleRegistration.isPresent()) {
+            throw new IllegalStateException("Unable to create a new registration, registration already exists! " + posibleExistingRegistration);
+        }
 
         StudentSubjectRegistration subjectRegistration =
                 new StudentSubjectRegistration(studentId, getSubject(subjectName).getId());
