@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.practice.universitysystem.dto.CurriculumDto;
 import com.practice.universitysystem.dto.SubjectDto;
+import com.practice.universitysystem.model.curriculum.Curriculum;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,47 +46,47 @@ class CurriculumControllerTest {
             .build();
     private final ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 
+    private int generatedCurriculumCount = 0;
+
     CurriculumDto initCurriculum() {
+        generatedCurriculumCount++;
         CurriculumDto curriculumDto = new CurriculumDto();
-        curriculumDto.setName("test curriculum");
-        curriculumDto.setDescription("test description");
-        curriculumDto.setDateStart(LocalDate.parse("2026-05-14"));
-        curriculumDto.setDateEnd(LocalDate.parse("2027-05-14"));
+        curriculumDto.setName("test curriculum " + generatedCurriculumCount);
+        curriculumDto.setDescription("test description " + generatedCurriculumCount);
+        curriculumDto.setDateStart(LocalDate.parse("2026-05-"+Math.min(14+generatedCurriculumCount, 30)));
+        curriculumDto.setDateEnd(LocalDate.parse("2027-06-"+Math.min(14+generatedCurriculumCount, 30)));
         return curriculumDto;
+    }
+
+    Curriculum createCurriculum(CurriculumDto curriculumDto) throws Exception {
+        String requestJson=ow.writeValueAsString(curriculumDto);
+        log.info(requestJson);
+        MvcResult result = this.mockMvc.perform(post("/curriculum/createCurriculum")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+        log.info(result.getResponse().getContentAsString());
+        return mapper.readValue(result.getResponse().getContentAsString(), Curriculum.class);
     }
 
     @Test
     @Transactional
     void shouldCreateCurriculum() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
-        String requestJson=ow.writeValueAsString(curriculumDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Curriculum curriculum = createCurriculum(curriculumDto);
     }
 
     @Test
     @Transactional
     void shouldDeleteCurriculum() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
-        String requestJson=ow.writeValueAsString(curriculumDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
-
+        Curriculum curriculum = createCurriculum(curriculumDto);
 
         this.mockMvc.perform(delete("/curriculum/deleteCurriculum")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
                         .contentType(APPLICATION_JSON)
-                .param("name", curriculumDto.getName()))
+                .param("name", curriculum.getName()))
                 .andExpect(status().is2xxSuccessful());
     }
 
@@ -93,19 +94,11 @@ class CurriculumControllerTest {
     @Transactional
     void shouldGetCurriculum() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
-        String requestJson=ow.writeValueAsString(curriculumDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
-
+        Curriculum curriculum = createCurriculum(curriculumDto);
 
         MvcResult result = this.mockMvc.perform(get("/curriculum/getCurriculum")
                         .contentType(APPLICATION_JSON)
-                        .param("name", curriculumDto.getName()))
+                        .param("name", curriculum.getName()))
                 .andExpect(status().is2xxSuccessful()).andReturn();
 
         log.info(result.getResponse().getContentAsString());
@@ -115,30 +108,10 @@ class CurriculumControllerTest {
     @Transactional
     void shouldGetAllCurriculum() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
+        Curriculum curriculum = createCurriculum(curriculumDto);
 
-        CurriculumDto curriculumDto2 = new CurriculumDto();
-        curriculumDto2.setName("test curriculum 2");
-        curriculumDto2.setDescription("test description 2");
-        curriculumDto2.setDateStart(LocalDate.parse("2026-05-14"));
-        curriculumDto2.setDateEnd(LocalDate.parse("2027-05-14"));
-
-        String requestJson=ow.writeValueAsString(curriculumDto);
-        String requestJson2=ow.writeValueAsString(curriculumDto2);
-
-        log.info(requestJson);
-        log.info(requestJson2);
-
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson2))
-                .andExpect(status().is2xxSuccessful());
-
+        CurriculumDto curriculumDto2 = initCurriculum();
+        Curriculum curriculum2 = createCurriculum(curriculumDto2);
 
         MvcResult result = this.mockMvc.perform(get("/curriculum/getAllCurriculums"))
                 .andExpect(status().is2xxSuccessful()).andReturn();
@@ -150,29 +123,10 @@ class CurriculumControllerTest {
     @Transactional
     void shouldGetAllCurriculumPaged() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
+        Curriculum curriculum = createCurriculum(curriculumDto);
 
-        CurriculumDto curriculumDto2 = new CurriculumDto();
-        curriculumDto2.setName("test curriculum 2");
-        curriculumDto2.setDescription("test description 2");
-        curriculumDto2.setDateStart(LocalDate.parse("2026-05-14"));
-        curriculumDto2.setDateEnd(LocalDate.parse("2027-05-14"));
-
-        String requestJson=ow.writeValueAsString(curriculumDto);
-        String requestJson2=ow.writeValueAsString(curriculumDto2);
-
-        log.info(requestJson);
-        log.info(requestJson2);
-
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson2))
-                .andExpect(status().is2xxSuccessful());
+        CurriculumDto curriculumDto2 = initCurriculum();
+        Curriculum curriculum2 = createCurriculum(curriculumDto2);
 
         MvcResult result = this.mockMvc.perform(get("/curriculum/getAllCurriculums/paged")
                         .param("page", "1")
@@ -186,14 +140,7 @@ class CurriculumControllerTest {
     @Transactional
     void shouldUpdateCurriculum() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
-        String requestJson=ow.writeValueAsString(curriculumDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Curriculum curriculum = createCurriculum(curriculumDto);
 
         CurriculumDto curriculumDtoMod = new CurriculumDto();
         curriculumDtoMod.setName("test curriculum mod");
@@ -204,7 +151,7 @@ class CurriculumControllerTest {
         String requestJsonMod=ow.writeValueAsString(curriculumDtoMod);
 
         MvcResult result = this.mockMvc.perform(
-                patch("/curriculum/updateCurriculum/{name}", curriculumDto.getName())
+                patch("/curriculum/updateCurriculum/{name}", curriculum.getName())
                         .contentType(APPLICATION_JSON)
                         .content(requestJsonMod)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret))
@@ -217,14 +164,7 @@ class CurriculumControllerTest {
     @Transactional
     void shouldAddAndGetAllSubjectToCurriculumAndDelete() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
-        String requestJson=ow.writeValueAsString(curriculumDto);
-        log.info(requestJson);
-
-        this.mockMvc.perform(post("/curriculum/createCurriculum")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().is2xxSuccessful());
+        Curriculum curriculum = createCurriculum(curriculumDto);
 
         SubjectDto subjectDto = new SubjectDto();
         subjectDto.setName("test subject");
