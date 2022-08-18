@@ -83,7 +83,7 @@ public class GradeController {
 
     @GetMapping("/getOneStudentGrades")
     @ResponseStatus(HttpStatus.OK)
-    @Secured({"ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT"})
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     public Set<Grade> getOneStudentGrades(@RequestParam Long subjectId, @RequestParam Long studentId) {
         return gradeService.getOneStudentGrades(subjectId, studentId);
     }
