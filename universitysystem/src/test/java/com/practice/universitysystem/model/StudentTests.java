@@ -27,7 +27,7 @@ import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -181,6 +181,6 @@ class StudentTests {
         assertThat(gradeRepository.findById(grade2.getId()).get(), is(grade2));
 
         assertThat(studentSubjectRegistrationRepository.
-                getReferenceById(subjectRegistration.getId()).getSubjectGrades(), contains(grade1, grade2));
+                getReferenceById(subjectRegistration.getId()).getSubjectGrades(), containsInAnyOrder(grade1, grade2));
     }
 }
