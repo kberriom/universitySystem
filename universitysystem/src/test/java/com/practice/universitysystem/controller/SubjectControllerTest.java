@@ -145,6 +145,29 @@ class SubjectControllerTest {
 
     @Test
     @Transactional
+    void shouldFailToUpdateSubject() throws Exception {
+        SubjectDto subjectDto = initSubject();
+        Subject subject = createSubject(subjectDto);
+
+        SubjectDto subjectDtoUpdate = new SubjectDto();
+        subjectDtoUpdate.setName("test subject updated");
+        subjectDtoUpdate.setDescription("test description updated");
+        subjectDtoUpdate.setEndDate(LocalDate.parse("1980-05-20"));
+
+        String requestJsonUpdated =ow.writeValueAsString(subjectDtoUpdate);
+
+        log.info(requestJsonUpdated);
+
+        MvcResult resultUpdated = this.mockMvc.perform(patch("/subject/updateSubject/{name}", subjectDto.getName())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJsonUpdated))
+                .andExpect(status().is4xxClientError()).andReturn();
+        log.info(resultUpdated.getResponse().getContentAsString());
+    }
+
+    @Test
+    @Transactional
     void shouldDeleteSubject() throws Exception {
         SubjectDto subjectDto = initSubject();
         Subject subject = createSubject(subjectDto);

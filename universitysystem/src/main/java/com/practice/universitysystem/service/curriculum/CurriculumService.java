@@ -31,6 +31,9 @@ public class CurriculumService {
 
     public Curriculum createCurriculum(CurriculumDto curriculumDto) {
         Curriculum curriculum = mapper.dtoToCurriculum(curriculumDto);
+        if (curriculum.getDateEnd().isBefore(curriculum.getDateStart())) {
+            throw new IllegalArgumentException("End date cannot happen before start date");
+        }
         serviceUtilsCurriculum.validate(curriculum);
         return curriculumRepository.save(curriculum);
     }
@@ -55,6 +58,9 @@ public class CurriculumService {
 
     public Curriculum updateCurriculum(String name, CurriculumDto curriculumDto) {
         Curriculum curriculum =  mapper.update(getCurriculum(name), curriculumDto);
+        if (curriculum.getDateEnd().isBefore(curriculum.getDateStart())) {
+            throw new IllegalArgumentException("End date cannot happen before start date");
+        }
         serviceUtilsCurriculum.validate(curriculum);
         return curriculumRepository.save(curriculum);
     }

@@ -162,6 +162,30 @@ class CurriculumControllerTest {
 
     @Test
     @Transactional
+    void shouldFailToUpdateCurriculum() throws Exception {
+        CurriculumDto curriculumDto = initCurriculum();
+        Curriculum curriculum = createCurriculum(curriculumDto);
+
+        CurriculumDto curriculumDtoMod = new CurriculumDto();
+        curriculumDtoMod.setName("test curriculum mod");
+        curriculumDtoMod.setDescription("test description mod");
+        curriculumDtoMod.setDateStart(curriculum.getDateStart());
+        curriculumDtoMod.setDateEnd(LocalDate.parse("1980-05-20"));
+
+        String requestJsonMod=ow.writeValueAsString(curriculumDtoMod);
+
+        MvcResult result = this.mockMvc.perform(
+                        patch("/curriculum/updateCurriculum/{name}", curriculum.getName())
+                                .contentType(APPLICATION_JSON)
+                                .content(requestJsonMod)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret))
+                .andExpect(status().is4xxClientError()).andReturn();
+
+        log.info(result.getResponse().getContentAsString());
+    }
+
+    @Test
+    @Transactional
     void shouldAddAndGetAllSubjectToCurriculumAndDelete() throws Exception {
         CurriculumDto curriculumDto = initCurriculum();
         Curriculum curriculum = createCurriculum(curriculumDto);

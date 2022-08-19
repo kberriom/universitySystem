@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import lombok.Data;
+import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.util.Set;
                 name = "curriculum_name_is_unique",
                 columnNames = {"name"})
 })
+@Check(constraints = "date_start <= date_end")
 public class Curriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

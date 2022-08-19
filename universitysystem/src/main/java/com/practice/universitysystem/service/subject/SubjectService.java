@@ -51,6 +51,9 @@ public class SubjectService {
 
     public Subject createSubject(SubjectDto subjectDto) {
         Subject subject = mapper.dtoToSubject(subjectDto);
+        if (subject.getEndDate().isBefore(subject.getStartDate())) {
+            throw new IllegalArgumentException("End date cannot happen before start date");
+        }
         subjectServiceUtils.validate(subject);
         return subjectRepository.save(subject);
     }
@@ -70,6 +73,9 @@ public class SubjectService {
 
     public Subject updateSubject(String name, SubjectDto subjectDto) {
         Subject update = mapper.update(getSubject(name), subjectDto);
+        if (update.getEndDate().isBefore(update.getStartDate())) {
+            throw new IllegalArgumentException("End date cannot happen before start date");
+        }
         subjectServiceUtils.validate(update);
         return subjectRepository.save(update);
     }
