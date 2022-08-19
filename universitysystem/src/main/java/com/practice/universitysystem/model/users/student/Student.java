@@ -2,9 +2,14 @@ package com.practice.universitysystem.model.users.student;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.universitysystem.model.users.UniversityUser;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
 
 

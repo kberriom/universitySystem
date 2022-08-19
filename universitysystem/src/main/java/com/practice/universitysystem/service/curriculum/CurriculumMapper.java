@@ -2,7 +2,11 @@ package com.practice.universitysystem.service.curriculum;
 
 import com.practice.universitysystem.dto.CurriculumDto;
 import com.practice.universitysystem.model.curriculum.Curriculum;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper
 public interface CurriculumMapper {
