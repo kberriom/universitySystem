@@ -1,9 +1,13 @@
 package com.practice.universitysystem.model.curriculum.subject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistrationId;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -18,14 +22,15 @@ public class Grade {
     @NotNull
     @DecimalMin(value = "0")
     @DecimalMax(value = "5")
-    private double gradeValue;
+    private Double gradeValue;
 
     @NotNull
     @DecimalMin(value = "0.01")
     @DecimalMax(value = "100")
-    private double percentageOfFinalGrade;
+    private Double percentageOfFinalGrade;
 
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private StudentSubjectRegistrationId registrationId;
 
     @NotNull

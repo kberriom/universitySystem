@@ -5,13 +5,15 @@ import com.practice.universitysystem.model.curriculum.subject.Grade;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -22,15 +24,13 @@ public class StudentSubjectRegistration {
     private StudentSubjectRegistrationId id;
 
     @NotNull
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "dd-MM-yyyy")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @CreatedDate
-    private Date registrationDate;
+    private LocalDate registrationDate;
 
     @DecimalMin(value = "0")
     @DecimalMax(value = "5")
-    private double finalGrade;
+    private Double finalGrade;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Grade> subjectGrades;

@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,10 +61,8 @@ class SubjectTests {
         subject.setRemote(true);
         subject.setOnSite(true);
         subject.setRoomLocation("38-404");
-        SimpleDateFormat dateFormatStart = new SimpleDateFormat("dd-MM-yyyy");
-        subject.setStartDate(dateFormatStart.parse("1-01-2010"));
-        SimpleDateFormat dateFormatEnd = new SimpleDateFormat("dd-MM-yyyy");
-        subject.setEndDate(dateFormatEnd.parse("30-05-2010"));
+        subject.setStartDate(LocalDate.parse("2010-01-01"));
+        subject.setEndDate(LocalDate.parse("2010-05-30"));
         subject.setCreditsValue(8);
         return subject;
     }

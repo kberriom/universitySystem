@@ -39,6 +39,8 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/curriculum/**").permitAll()
+                .antMatchers("/subject/**").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
                 .userDetailsService(userDetailsServiceImp)

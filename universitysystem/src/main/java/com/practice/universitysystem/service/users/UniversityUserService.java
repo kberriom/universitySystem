@@ -1,38 +1,30 @@
 package com.practice.universitysystem.service.users;
 
-import com.practice.universitysystem.dto.PageInfoDto;
-import com.practice.universitysystem.dto.users.UserUpdateDto;
 import com.practice.universitysystem.dto.users.UserDto;
-import com.practice.universitysystem.dto.users.UserMapper;
 import com.practice.universitysystem.model.users.UniversityUser;
 import com.practice.universitysystem.repository.users.UniversityUserRepository;
 import com.practice.universitysystem.service.AuthService;
+import com.practice.universitysystem.service.ServiceUtils;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.validation.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 /**
- * @param <M> Mapper utility type
  * @param <U> Specific User repository type
- * @param <S> UserUpdateDto instance type
  * @param <D> UserDto instance type
  * @param <R> Instance type repository
  */
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S extends UserUpdateDto, D extends UserDto, U extends UniversityUser, R extends JpaRepository<U, Long>>{
+public abstract class UniversityUserService<D extends UserDto,M extends UserMapper<U, D>, U extends UniversityUser, R extends JpaRepository<U, Long>>{
 
     private AuthService authService;
 
-    /**
-     * MapStruct User mapper instance Mapper
-     */
-    private M userMapper;
+    private M mapper;
 
     /**
      * User instance patent repository.
@@ -45,26 +37,19 @@ public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S ext
      */
     private R instanceUserRepository;
 
+    private ServiceUtils<U, Long, R> serviceUtils;
+
     public U createUser(D userDto) {
         String encodedPassword = authService.getEncodedPassword(userDto.getUserPassword());
         userDto.setUserPassword(encodedPassword);
 
-        U user = userMapper.dtoToUser(userDto);
+        U user = mapper.dtoToUser(userDto);
 
-        user.setEnrollmentDate(new Date());
+        user.setEnrollmentDate(LocalDate.now());
 
-        validateUser(user);
+        serviceUtils.validate(user);
 
         return instanceUserRepository.save(user);
-    }
-
-    public void validateUser(U user) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<U>> constraintViolations = validator.validate(user);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
-        }
     }
 
     public void deleteUser(String email) {
@@ -77,17 +62,18 @@ public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S ext
         instanceUserRepository.delete(user);
     }
 
-    public U updateUser(String email, S updateDto) {
-        U user = getUser(email);
-        userMapper.update(user, updateDto);
-        validateUser(user);
+    public U updateUser(String email, D updateDto) {
+        U user = mapper.update(getUser(email), updateDto);
+        serviceUtils.validate(user);
         return instanceUserRepository.save(user);
     }
 
-    public U updateUser(long id, S updateDto) {
-        U user = getUser(id);
-        userMapper.update(user, updateDto);
-        validateUser(user);
+    /**
+     * Admin update, can update birthdate and gov id
+     */
+    public U updateUser(long id, D updateDto) {
+        U user = mapper.adminUpdate(getUser(id), updateDto);
+        serviceUtils.validate(user);
         return instanceUserRepository.save(user);
     }
 
@@ -104,36 +90,13 @@ public abstract class UniversityUserService<M extends UserMapper<U, S, D>, S ext
         return instanceUserRepository.findAll();
     }
 
-    public Page<U> getAllUsers(int page, int pageSize) {
-        return instanceUserRepository.findAll(PageRequest.of(page, pageSize));
-    }
-
     /**
      * @param page Desired page number, starts at 1
      * @param size total amount of pages
      * @return list containing current page info and the paginated list
      */
     public List<Object> getUserPaginatedList(int page, int size) {
-        page--;
-
-        if (page < 0) {
-            throw new IllegalArgumentException("Page number must not be less than 1");
-        }
-
-        List<U> userList = getAllUsers(page, size).toList();
-        int responseUserSize = userList.size();
-        List<Object> responseList = new ArrayList<>(responseUserSize +1);
-
-        PageInfoDto pageInfo = new PageInfoDto(page+1L, responseUserSize, maxPageNumberGiven(size));
-
-        responseList.add(pageInfo);
-        responseList.addAll(userList);
-        return responseList;
-    }
-
-    private long maxPageNumberGiven(long pageSize) {
-        long totalCount = instanceUserRepository.count();
-        return (long) Math.ceil((double) totalCount / pageSize);
+        return serviceUtils.getPaginatedList(page, size);
     }
 
 }

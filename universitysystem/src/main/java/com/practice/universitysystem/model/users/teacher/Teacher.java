@@ -1,7 +1,13 @@
 package com.practice.universitysystem.model.users.teacher;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.universitysystem.model.users.UniversityUser;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -23,6 +29,7 @@ public class Teacher extends UniversityUser {
     @NotNull
     @Setter(AccessLevel.NONE)
     @Getter
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String role = "ROLE_TEACHER";
 
 }

@@ -12,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
@@ -34,11 +37,10 @@ class TeacherTests {
         teacher.setMobilePhone("1234567896");
         teacher.setLandPhone("1234567896");
         teacher.setDepartment("TEST_DEPARTMENT");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        teacher.setBirthdate(dateFormat.parse("14-05-2000"));
+        teacher.setBirthdate(LocalDate.parse("2000-05-14"));
         teacher.setUsername("TEACHER_USERNAME");
         teacher.setUserPassword("PASSWORD_EXAMPLE");
-        teacher.setEnrollmentDate(new Date());
+        teacher.setEnrollmentDate(LocalDate.now());
         return teacher;
     }
 
