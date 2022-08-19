@@ -15,11 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * @param <T> A model extending {@link JpaRepository}
- * @param <I> the model ID type
- * @param <R> the model repository
- */
 @AllArgsConstructor
 public class ServiceUtils<T, I, R extends JpaRepository<T, I>> {
 
