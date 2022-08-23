@@ -1,5 +1,6 @@
 package com.practice.universitysystem.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -140,6 +141,55 @@ class GradeControllerTest {
                         .content(requestJsonGradeMod))
                 .andExpect(status().is2xxSuccessful()).andReturn();
         log.info(resultMod.getResponse().getContentAsString());
+    }
+
+    @Test
+    @Transactional
+    void shouldCreateAndDeleteGrade() throws Exception {
+        SubjectDto subjectDto = initSubject();
+        String requestJson=ow.writeValueAsString(subjectDto);
+        log.info(requestJson);
+        MvcResult resultSubject = this.mockMvc.perform(post("/subject/createSubject")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+        Subject subject = mapper.readValue(resultSubject.getResponse().getContentAsString(), Subject.class);
+
+        StudentDto studentDto = initStudent();
+        String requestJsonStudent =ow.writeValueAsString(studentDto);
+        log.info(requestJsonStudent);
+        MvcResult resultStudent = this.mockMvc.perform(post("/auth/createStudent")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJsonStudent))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+        UniversityUser student = mapper.readValue(resultStudent.getResponse().getContentAsString(), Student.class);
+
+        MvcResult resultRegistration = this.mockMvc.perform(post("/subject/addStudent")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
+                        .param("studentId", String.valueOf(student.getId()))
+                        .param("subjectName", subject.getName()))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+        log.info(resultRegistration.getResponse().getContentAsString());
+
+        GradeDto gradeDto = new GradeDto();
+        gradeDto.setDescription("Test grade");
+        gradeDto.setGradeValue(5D);
+        gradeDto.setPercentageOfFinalGrade(50D);
+        String requestJsonGrade =ow.writeValueAsString(gradeDto);
+        log.info(requestJsonGrade);
+
+        MvcResult resultGrade = this.mockMvc.perform(post("/grade/addStudentGrade")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)
+                        .param("subjectId", String.valueOf(subject.getId()))
+                        .param("studentId", String.valueOf(student.getId()))
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJsonGrade))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+        StudentSubjectRegistration subjectRegistration
+                = mapper.readValue(resultGrade.getResponse().getContentAsString(), StudentSubjectRegistration.class);
+        log.info(resultGrade.getResponse().getContentAsString());
 
         this.mockMvc.perform(delete("/grade/removeStudentGrade")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminSecret)

@@ -11,10 +11,12 @@ import com.practice.universitysystem.service.ServiceUtils;
 import com.practice.universitysystem.service.users.student.StudentService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -39,6 +41,7 @@ public class GradeService {
     public StudentSubjectRegistration setStudentFinalGrade(Long subjectId, Long studentId, Double finalGrade) {
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
         subjectRegistration.setFinalGrade(finalGrade);
+        registrationServiceUtils.validate(subjectRegistration);
         return registrationRepository.save(subjectRegistration);
     }
 
@@ -61,12 +64,13 @@ public class GradeService {
         finalGrade = (5) * (finalGradePercentage) / (100);
 
         subjectRegistration.setFinalGrade(finalGrade);
+        registrationServiceUtils.validate(subjectRegistration);
         return registrationRepository.save(subjectRegistration);
     }
 
-    private void verifyGradeCumulativePercentageOfFinalGrade(Set<Grade> grades, Grade grade) {
+    private void verifyGradeCumulativePercentageOfFinalGrade(Set<Grade> grades, double newGradePercentageOfFinalGrade) {
         double currentTotal = grades.stream().mapToDouble(Grade::getPercentageOfFinalGrade).sum();
-        double futureTotal = grade.getPercentageOfFinalGrade() + currentTotal;
+        double futureTotal = newGradePercentageOfFinalGrade + currentTotal;
         if (futureTotal > 100D) {
             throw new IllegalArgumentException("Grade percentage of final grade would excede 100%");
         }
@@ -86,7 +90,7 @@ public class GradeService {
             subjectRegistration.setSubjectGrades(new HashSet<>());
         }
         
-        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade);
+        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade.getPercentageOfFinalGrade());
 
         grade = gradeRepository.save(grade);
         subjectRegistration.getSubjectGrades().add(grade);
@@ -107,20 +111,33 @@ public class GradeService {
                 new NoSuchElementException("Could not find a grade with id: " + gradeId));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public StudentSubjectRegistration modifyStudentGrade(Long subjectId, Long studentId, Long gradeId, GradeDto gradeDto) {
         Grade grade = getGradeById(gradeId);
-        grade = mapper.update(grade, gradeDto);
-        gradeServiceUtils.validate(grade);
-
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
 
-        subjectRegistration.getSubjectGrades().remove(getGradeById(gradeId));
+        Set<Grade> grades = Optional.of(subjectRegistration.getSubjectGrades()).orElseThrow(()->
+                new NoSuchElementException("Unable to find any existing grades in " + subjectRegistration.getId()));
 
-        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade);
+        if (!grades.contains(grade)) {
+            throw new NoSuchElementException("Unable to find a grade with id: " + gradeId + " in the given student registration with studentId: " + studentId);
+        }
 
+        double gradePercentage;
+        if (gradeDto.getPercentageOfFinalGrade() == null) {
+            gradePercentage = grade.getPercentageOfFinalGrade();
+        } else {
+            gradePercentage = gradeDto.getPercentageOfFinalGrade();
+        }
+        subjectRegistration.getSubjectGrades().remove(grade);
+        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), gradePercentage);
+
+        grade = mapper.update(grade, gradeDto);
+        gradeServiceUtils.validate(grade);
         gradeRepository.save(grade);
-        subjectRegistration.getSubjectGrades().add(grade);
+        gradeRepository.flush();
 
+        subjectRegistration.getSubjectGrades().add(grade);
         return registrationRepository.save(subjectRegistration);
     }
 
