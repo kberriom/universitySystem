@@ -1,15 +1,12 @@
 package com.practice.universitysystem.model.curriculum.subject;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.practice.universitysystem.model.curriculum.Curriculum;
 import lombok.Data;
 import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 @Data
@@ -47,10 +44,6 @@ public class Subject {
 
     @NotNull
     private Integer creditsValue;
-
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    Set<Curriculum> curriculumsContainingSubject;
 
     /*
     Lombok generates non-standard named setters and getters for booleans
