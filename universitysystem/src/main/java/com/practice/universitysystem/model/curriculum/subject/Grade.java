@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistrationId;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;

@@ -2,7 +2,7 @@ package com.practice.universitysystem.model.users.student.student_subject;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable

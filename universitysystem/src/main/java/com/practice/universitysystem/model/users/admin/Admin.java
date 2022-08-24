@@ -1,7 +1,11 @@
 package com.practice.universitysystem.model.users.admin;
 
 import com.practice.universitysystem.model.users.UniversityUser;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;

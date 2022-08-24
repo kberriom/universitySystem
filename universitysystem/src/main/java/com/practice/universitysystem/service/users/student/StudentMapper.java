@@ -3,7 +3,12 @@ package com.practice.universitysystem.service.users.student;
 import com.practice.universitysystem.dto.users.StudentDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.service.users.UserMapper;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper
 public interface StudentMapper extends UserMapper<Student, StudentDto> {
