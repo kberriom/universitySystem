@@ -19,13 +19,16 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 import static com.practice.universitysystem.model.SubjectTests.getSubject;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
@@ -66,8 +69,6 @@ class StudentTests {
     @Test
     @Transactional
     void createAndDeleteStudentTest() throws ParseException {
-        assertEquals(0, studentRepository.count());
-
         Student student = getStudent();
         Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
         if (!constraintViolations.isEmpty()) {
@@ -75,21 +76,15 @@ class StudentTests {
         }
 
         studentRepository.save(student);
-
-        assertEquals(1, studentRepository.count());
+        assertThat(studentRepository.findById(student.getId()).orElseThrow(), is(student));
 
         studentRepository.delete(student);
-
-        assertEquals(0, studentRepository.count());
-
+        assertThat(studentRepository.findById(student.getId()).isPresent(), is(false));
     }
 
     @Test
     @Transactional
     void registerSubjectTest() throws ParseException {
-        assertEquals(0, studentRepository.count());
-        assertEquals(0, subjectRepository.count());
-        assertEquals(0, studentSubjectRegistrationRepository.count());
 
         Student student = getStudent();
         Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
@@ -116,17 +111,12 @@ class StudentTests {
 
         studentSubjectRegistrationRepository.save(subjectRegistration);
 
-        assertEquals(1, studentSubjectRegistrationRepository.count());
-
+        assertThat(studentSubjectRegistrationRepository.findAllBySubjectId(subject.getId()).get(0), is(subjectRegistration));
     }
 
     @Test
     @Transactional
     void registerSubjectGradeTest() throws ParseException {
-        assertEquals(0, studentRepository.count());
-        assertEquals(0, subjectRepository.count());
-        assertEquals(0, studentSubjectRegistrationRepository.count());
-        assertEquals(0, gradeRepository.count());
 
         Student student = getStudent();
         Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
@@ -153,8 +143,8 @@ class StudentTests {
         subjectRegistration.setSubjectGrades(new HashSet<>());
 
         studentSubjectRegistrationRepository.save(subjectRegistration);
-        assertEquals(1, studentSubjectRegistrationRepository.count());
 
+        assertThat(studentSubjectRegistrationRepository.findAllBySubjectId(subject.getId()).get(0), is(subjectRegistration));
 
         Grade grade1 = new Grade();
         grade1.setDescription("GRADE_DESCRIPTION");
@@ -166,6 +156,8 @@ class StudentTests {
             throw new ConstraintViolationException(constraintViolationsGrade1);
         }
 
+        gradeRepository.save(grade1);
+
         Grade grade2 = new Grade();
         grade2.setDescription("GRADE_DESCRIPTION");
         grade2.setGradeValue(5D);
@@ -176,6 +168,8 @@ class StudentTests {
             throw new ConstraintViolationException(constraintViolationsGrade2);
         }
 
+        gradeRepository.save(grade2);
+
         subjectRegistration.getSubjectGrades().add(grade1);
         subjectRegistration.getSubjectGrades().add(grade2);
 
@@ -183,9 +177,10 @@ class StudentTests {
 
         System.out.println(subjectRegistration);
 
-        assertEquals(2, gradeRepository.count());
+        assertThat(gradeRepository.findById(grade1.getId()).get(), is(grade1));
+        assertThat(gradeRepository.findById(grade2.getId()).get(), is(grade2));
 
-        assertEquals(2, studentSubjectRegistrationRepository.
-                getReferenceById(subjectRegistration.getId()).getSubjectGrades().size());
+        assertThat(studentSubjectRegistrationRepository.
+                getReferenceById(subjectRegistration.getId()).getSubjectGrades(), containsInAnyOrder(grade1, grade2));
     }
 }

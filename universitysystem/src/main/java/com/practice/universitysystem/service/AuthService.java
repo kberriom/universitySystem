@@ -46,7 +46,7 @@ public class AuthService {
     }
 
     public String changePassword(String email, String newPassword) throws NoSuchElementException {
-        UniversityUser user = universityUserRepository.findByEmail(email).orElseThrow();
+        UniversityUser user = universityUserRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("Invalid email"));
         String encodedPassword = getEncodedPassword(newPassword);
         user.setUserPassword(encodedPassword);
         universityUserRepository.save(user);

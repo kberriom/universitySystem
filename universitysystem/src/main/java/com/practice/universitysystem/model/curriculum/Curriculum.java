@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.practice.universitysystem.model.curriculum.subject.Subject;
 import lombok.Data;
+import org.hibernate.annotations.Check;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ import java.util.Set;
                 name = "curriculum_name_is_unique",
                 columnNames = {"name"})
 })
+@Check(constraints = "date_start <= date_end")
 public class Curriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -46,7 +48,7 @@ public class Curriculum {
     private LocalDate dateEnd;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "curriculum_subjects",
             joinColumns = @JoinColumn(name = "curriculum_id"),

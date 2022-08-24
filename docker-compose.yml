@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  app:
+    image: universitysystem:latest
+    build:
+      context: .\universitysystem\
+    ports:
+      - 8080:8080
+    networks:
+      - university-network
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgresUniversitySystem.
+      - SPRING_PROFILES_ACTIVE=production
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgresUniversitySystem.
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+    networks:
+      - university-network
+volumes:
+  db:
+    driver: local
+networks:
+   university-network:

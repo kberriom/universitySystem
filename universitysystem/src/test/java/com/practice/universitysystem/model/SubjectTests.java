@@ -17,7 +17,8 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 class SubjectTests {
@@ -36,7 +37,6 @@ class SubjectTests {
     @Test
     @Transactional
     void createAndDeleteSubjectTest() throws ParseException {
-        assertEquals(0, subjectRepository.count());
 
         Subject subject = getSubject("SUBJECT1");
         Set<ConstraintViolation<Subject>> constraintViolationsSubject = validator.validate(subject);
@@ -46,12 +46,11 @@ class SubjectTests {
 
         subjectRepository.save(subject);
 
-        assertEquals(1, subjectRepository.count());
+        assertThat(subjectRepository.findById(subject.getId()).orElseThrow(), is(subject));
 
         subjectRepository.delete(subject);
 
-        assertEquals(0, subjectRepository.count());
-
+        assertThat(subjectRepository.findById(subject.getId()).isPresent(), is(false));
     }
 
     protected static Subject getSubject(String name) throws ParseException {

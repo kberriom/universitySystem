@@ -10,10 +10,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CurriculumService {
@@ -34,6 +31,9 @@ public class CurriculumService {
 
     public Curriculum createCurriculum(CurriculumDto curriculumDto) {
         Curriculum curriculum = mapper.dtoToCurriculum(curriculumDto);
+        if (curriculum.getDateEnd().isBefore(curriculum.getDateStart())) {
+            throw new IllegalArgumentException("End date cannot happen before start date");
+        }
         serviceUtilsCurriculum.validate(curriculum);
         return curriculumRepository.save(curriculum);
     }
@@ -44,7 +44,8 @@ public class CurriculumService {
     }
 
     public Curriculum getCurriculum(String name) {
-        return curriculumRepository.findByName(name).orElseThrow();
+        return curriculumRepository.findByName(name).orElseThrow(()->
+                new NoSuchElementException("Unable to find Curriculum with name: " + name));
     }
 
     public List<Curriculum> getAllCurriculum() {
@@ -57,6 +58,9 @@ public class CurriculumService {
 
     public Curriculum updateCurriculum(String name, CurriculumDto curriculumDto) {
         Curriculum curriculum =  mapper.update(getCurriculum(name), curriculumDto);
+        if (curriculum.getDateEnd().isBefore(curriculum.getDateStart())) {
+            throw new IllegalArgumentException("End date cannot happen before start date");
+        }
         serviceUtilsCurriculum.validate(curriculum);
         return curriculumRepository.save(curriculum);
     }
@@ -67,7 +71,8 @@ public class CurriculumService {
             curriculum.setSubjects(new HashSet<>());
         }
 
-        Subject subjectToAdd = subjectRepository.findByName(subjectName).orElseThrow();
+        Subject subjectToAdd = subjectRepository.findByName(subjectName).orElseThrow(()->
+                new NoSuchElementException("Unable to add nonexistent Subject with subjectName: "+ subjectName));
 
         curriculum.getSubjects().add(subjectToAdd);
         Curriculum savedCurriculum = curriculumRepository.save(curriculum);
@@ -81,7 +86,8 @@ public class CurriculumService {
 
     public void removeSubject(String curriculumName, String subjectName) {
         Curriculum curriculum = getCurriculum(curriculumName);
-        Subject subjectToDelete = subjectRepository.findByName(subjectName).orElseThrow();
+        Subject subjectToDelete = subjectRepository.findByName(subjectName).
+                orElseThrow(()-> new NoSuchElementException("Unable to delete nonexistent Subject with subjectName: "+ subjectName));
         curriculum.getSubjects().remove(subjectToDelete);
         curriculumRepository.save(curriculum);
     }

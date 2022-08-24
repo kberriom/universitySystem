@@ -1,8 +1,6 @@
 package com.practice.universitysystem.model.curriculum.subject;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.practice.universitysystem.model.curriculum.Curriculum;
 import lombok.Data;
 import org.hibernate.annotations.Check;
 
@@ -17,12 +15,11 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 @Data
 @Check(constraints =
-        "(remote IS NOT NULL OR on_site IS NOT NULL) AND (on_site IS NOT NULL AND room_location IS NOT NULL)")
+        "(remote IS NOT NULL OR on_site IS NOT NULL) AND (on_site IS NOT NULL AND room_location IS NOT NULL) AND (start_date <= end_date)")
 @Table(uniqueConstraints = {
         @UniqueConstraint(
                 name = "subject_name_is_unique",
@@ -55,10 +52,6 @@ public class Subject {
 
     @NotNull
     private Integer creditsValue;
-
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
-    Set<Curriculum> curriculumsContainingSubject;
 
     /*
     Lombok generates non-standard named setters and getters for booleans

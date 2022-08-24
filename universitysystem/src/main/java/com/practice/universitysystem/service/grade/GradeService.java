@@ -5,26 +5,34 @@ import com.practice.universitysystem.model.curriculum.subject.Grade;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistration;
 import com.practice.universitysystem.model.users.student.student_subject.StudentSubjectRegistrationId;
 import com.practice.universitysystem.repository.curriculum.subject.GradeRepository;
+import com.practice.universitysystem.repository.curriculum.subject.SubjectRepository;
 import com.practice.universitysystem.repository.users.student.student_subject.StudentSubjectRegistrationRepository;
 import com.practice.universitysystem.service.ServiceUtils;
+import com.practice.universitysystem.service.users.student.StudentService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class GradeService {
 
     GradeRepository gradeRepository;
+    SubjectRepository subjectRepository;
     StudentSubjectRegistrationRepository registrationRepository;
+    StudentService studentService;
     ServiceUtils<Grade, Long, GradeRepository> gradeServiceUtils;
     ServiceUtils<StudentSubjectRegistration, StudentSubjectRegistrationId, StudentSubjectRegistrationRepository> registrationServiceUtils;
     private final GradeMapper mapper = Mappers.getMapper(GradeMapper.class);
 
-    public GradeService(GradeRepository gradeRepository, StudentSubjectRegistrationRepository registrationRepository) {
+    public GradeService(GradeRepository gradeRepository, StudentSubjectRegistrationRepository registrationRepository, SubjectRepository subjectRepository) {
         this.gradeRepository = gradeRepository;
+        this.subjectRepository = subjectRepository;
         this.registrationRepository = registrationRepository;
         gradeServiceUtils = new ServiceUtils<>(gradeRepository);
         registrationServiceUtils = new ServiceUtils<>(registrationRepository);
@@ -33,6 +41,7 @@ public class GradeService {
     public StudentSubjectRegistration setStudentFinalGrade(Long subjectId, Long studentId, Double finalGrade) {
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
         subjectRegistration.setFinalGrade(finalGrade);
+        registrationServiceUtils.validate(subjectRegistration);
         return registrationRepository.save(subjectRegistration);
     }
 
@@ -55,12 +64,13 @@ public class GradeService {
         finalGrade = (5) * (finalGradePercentage) / (100);
 
         subjectRegistration.setFinalGrade(finalGrade);
+        registrationServiceUtils.validate(subjectRegistration);
         return registrationRepository.save(subjectRegistration);
     }
 
-    private void verifyGradeCumulativePercentageOfFinalGrade(Set<Grade> grades, Grade grade) {
+    private void verifyGradeCumulativePercentageOfFinalGrade(Set<Grade> grades, double newGradePercentageOfFinalGrade) {
         double currentTotal = grades.stream().mapToDouble(Grade::getPercentageOfFinalGrade).sum();
-        double futureTotal = grade.getPercentageOfFinalGrade() + currentTotal;
+        double futureTotal = newGradePercentageOfFinalGrade + currentTotal;
         if (futureTotal > 100D) {
             throw new IllegalArgumentException("Grade percentage of final grade would excede 100%");
         }
@@ -76,11 +86,12 @@ public class GradeService {
 
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
 
-        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade);
-
         if (subjectRegistration.getSubjectGrades() == null) {
             subjectRegistration.setSubjectGrades(new HashSet<>());
         }
+        
+        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade.getPercentageOfFinalGrade());
+
         grade = gradeRepository.save(grade);
         subjectRegistration.getSubjectGrades().add(grade);
         return registrationRepository.save(subjectRegistration);
@@ -91,29 +102,48 @@ public class GradeService {
         registrationId.setSubjectId(subjectId);
         registrationId.setStudentUserId(studentId);
 
-        return registrationRepository.findById(registrationId).orElseThrow();
+        return registrationRepository.findById(registrationId).orElseThrow(() ->
+                new NoSuchElementException("Could not find a registration with Student id: " + studentId + " and Subject id: " + subjectId));
     }
 
-    public StudentSubjectRegistration modifyStudentGrade(Long subjectId, Long studentId, Long gradeId, GradeDto gradeDto) {
-        Grade grade = gradeRepository.findById(gradeId).orElseThrow();
-        grade = mapper.update(grade, gradeDto);
-        gradeServiceUtils.validate(grade);
+    private Grade getGradeById(Long gradeId) {
+        return gradeRepository.findById(gradeId).orElseThrow(() ->
+                new NoSuchElementException("Could not find a grade with id: " + gradeId));
+    }
 
+    @Transactional(rollbackFor = Exception.class)
+    public StudentSubjectRegistration modifyStudentGrade(Long subjectId, Long studentId, Long gradeId, GradeDto gradeDto) {
+        Grade grade = getGradeById(gradeId);
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
 
-        subjectRegistration.getSubjectGrades().remove(gradeRepository.findById(gradeId).orElseThrow());
+        Set<Grade> grades = Optional.of(subjectRegistration.getSubjectGrades()).orElseThrow(()->
+                new NoSuchElementException("Unable to find any existing grades in " + subjectRegistration.getId()));
 
-        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), grade);
+        if (!grades.contains(grade)) {
+            throw new NoSuchElementException("Unable to find a grade with id: " + gradeId + " in the given student registration with studentId: " + studentId);
+        }
 
+        double gradePercentage;
+        if (gradeDto.getPercentageOfFinalGrade() == null) {
+            gradePercentage = grade.getPercentageOfFinalGrade();
+        } else {
+            gradePercentage = gradeDto.getPercentageOfFinalGrade();
+        }
+        subjectRegistration.getSubjectGrades().remove(grade);
+        verifyGradeCumulativePercentageOfFinalGrade(subjectRegistration.getSubjectGrades(), gradePercentage);
+
+        grade = mapper.update(grade, gradeDto);
+        gradeServiceUtils.validate(grade);
         gradeRepository.save(grade);
-        subjectRegistration.getSubjectGrades().add(grade);
+        gradeRepository.flush();
 
+        subjectRegistration.getSubjectGrades().add(grade);
         return registrationRepository.save(subjectRegistration);
     }
 
     public void removeStudentGrade(Long subjectId, Long studentId, Long gradeId) {
         StudentSubjectRegistration subjectRegistration = getStudentSubjectRegistration(subjectId, studentId);
-        Grade grade = gradeRepository.findById(gradeId).orElseThrow();
+        Grade grade = getGradeById(gradeId);
 
         subjectRegistration.getSubjectGrades().remove(grade);
         registrationRepository.save(subjectRegistration);
@@ -122,6 +152,9 @@ public class GradeService {
     }
 
     public List<Set<Grade>> getAllStudentAllGradesInSubject(Long subjectId) {
+        if (!subjectRepository.existsById(subjectId)) {
+            throw new NoSuchElementException("Could not find a subject with subjectId: " + subjectId);
+        }
         return registrationRepository.findAllBySubjectId(subjectId)
                 .stream().map(StudentSubjectRegistration::getSubjectGrades).toList();
     }

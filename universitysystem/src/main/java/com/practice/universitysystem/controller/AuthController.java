@@ -64,7 +64,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/updatePassword")
+    @PostMapping("/updatePassword")
     @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> updatePassword(@RequestBody NewPasswordDto credentials) {
         try {
