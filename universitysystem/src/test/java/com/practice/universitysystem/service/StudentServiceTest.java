@@ -4,6 +4,7 @@ import com.practice.universitysystem.dto.users.StudentDto;
 import com.practice.universitysystem.model.users.student.Student;
 import com.practice.universitysystem.repository.users.UniversityUserRepository;
 import com.practice.universitysystem.repository.users.student.StudentRepository;
+import com.practice.universitysystem.repository.users.student.student_subject.StudentSubjectRegistrationRepository;
 import com.practice.universitysystem.service.users.student.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,12 +45,14 @@ class StudentServiceTest {
     UniversityUserRepository userRepository;
     @Mock
     StudentRepository instanceUserRepository;
+    @Mock
+    StudentSubjectRegistrationRepository registrationRepository;
 
     StudentService studentService;
 
     @BeforeEach
     void setup() {
-        studentService = new StudentService(authService, userRepository, instanceUserRepository);
+        studentService = new StudentService(authService, userRepository, instanceUserRepository, registrationRepository);
     }
 
     @Test

@@ -81,6 +81,12 @@ public class SubjectService {
     }
 
     public void deleteSubject(String name) {
+        if (!registrationRepository.findAllBySubjectId(getSubject(name).getId()).isEmpty()) {
+            throw new IllegalStateException("Cannot delete subject if it has any existing registration");
+        }
+        if (!getAllTeachers(name).isEmpty()) {
+            throw new IllegalStateException("Cannot delete subject if any teacher is still assigned");
+        }
         subjectRepository.delete(getSubject(name));
     }
 

@@ -13,4 +13,6 @@ public interface TeacherAssignationRepository extends JpaRepository<TeacherAssig
     @Query("from TeacherAssignation where subject_id=:subjectId")
     List<TeacherAssignation> findAllBySubjectId(@Param("subjectId") Long subjectId);
 
+    @Query("from TeacherAssignation where teacher_user_id=:teacherUserId")
+    List<TeacherAssignation> findAllByTeacherUserId(@Param("teacherUserId") Long teacherUserId);
 }

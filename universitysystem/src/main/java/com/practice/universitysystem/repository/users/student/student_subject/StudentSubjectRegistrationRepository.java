@@ -13,4 +13,6 @@ public interface StudentSubjectRegistrationRepository extends JpaRepository<Stud
     @Query("from StudentSubjectRegistration where subject_id=:subjectId")
     List<StudentSubjectRegistration> findAllBySubjectId(@Param("subjectId") Long subjectId);
 
+    @Query("from StudentSubjectRegistration where student_user_id=:studentUserId")
+    List<StudentSubjectRegistration> findAllByStudentUserId(@Param("studentUserId") Long studentUserId);
 }

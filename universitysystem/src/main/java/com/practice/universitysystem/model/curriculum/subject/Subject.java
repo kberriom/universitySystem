@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Check(constraints =
-        "(remote IS NOT NULL OR on_site IS NOT NULL) AND (on_site IS NOT NULL AND room_location IS NOT NULL) AND (start_date <= end_date)")
+        "((remote IS NOT NULL OR on_site IS NOT NULL) AND (on_site IS NOT NULL AND room_location IS NOT NULL)) AND (start_date <= end_date)")
 @Table(uniqueConstraints = {
         @UniqueConstraint(
                 name = "subject_name_is_unique",

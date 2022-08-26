@@ -4,6 +4,7 @@ import com.practice.universitysystem.dto.users.TeacherDto;
 import com.practice.universitysystem.model.users.teacher.Teacher;
 import com.practice.universitysystem.repository.users.UniversityUserRepository;
 import com.practice.universitysystem.repository.users.teacher.TeacherRepository;
+import com.practice.universitysystem.repository.users.teacher.teacher_assignation.TeacherAssignationRepository;
 import com.practice.universitysystem.service.users.teacher.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,12 +44,14 @@ class TeacherServiceTest {
     UniversityUserRepository userRepository;
     @Mock
     TeacherRepository instanceUserRepository;
+    @Mock
+    TeacherAssignationRepository assignationRepository;
 
     TeacherService teacherService;
 
     @BeforeEach
     void setup() {
-        teacherService = new TeacherService(authService, userRepository, instanceUserRepository);
+        teacherService = new TeacherService(authService, userRepository, instanceUserRepository, assignationRepository);
     }
 
     @Test
