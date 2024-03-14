@@ -3,9 +3,9 @@ package com.practice.universitysystem.model.users.teacher.teacher_asignation;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Data

@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface TeacherAssignationRepository extends JpaRepository<TeacherAssignation, TeacherAssignationId> {
 
-    @Query("from TeacherAssignation where subject_id=:subjectId")
-    List<TeacherAssignation> findAllBySubjectId(@Param("subjectId") Long subjectId);
+    @Query("select t from TeacherAssignation t where t.id.subjectId = ?1")
+    List<TeacherAssignation> findAllBySubjectId(Long subjectId);
 
-    @Query("from TeacherAssignation where teacher_user_id=:teacherUserId")
-    List<TeacherAssignation> findAllByTeacherUserId(@Param("teacherUserId") Long teacherUserId);
+    @Query("select t from TeacherAssignation t where t.id.teacherUserId = ?1")
+    List<TeacherAssignation> findAllByTeacherUserId(Long teacherUserId);
 }
