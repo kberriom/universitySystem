@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,10 +47,8 @@ class StudentControllerTest {
             .build();
     private final ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 
-    private int generatedStudentCount = 0;
-
     StudentDto initStudent() {
-        generatedStudentCount++;
+        int generatedStudentCount = new Random().nextInt();
         StudentDto studentDto = new StudentDto();
         studentDto.setName("teststudent " + generatedStudentCount);
         studentDto.setLastName("teststudent " + generatedStudentCount + " lastname");
