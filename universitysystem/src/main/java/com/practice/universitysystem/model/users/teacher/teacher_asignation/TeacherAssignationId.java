@@ -2,7 +2,7 @@ package com.practice.universitysystem.model.users.teacher.teacher_asignation;
 
 import lombok.Data;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable

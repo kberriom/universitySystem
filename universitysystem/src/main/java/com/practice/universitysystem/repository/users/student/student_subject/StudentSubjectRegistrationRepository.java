@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface StudentSubjectRegistrationRepository extends JpaRepository<StudentSubjectRegistration, StudentSubjectRegistrationId> {
 
-    @Query("from StudentSubjectRegistration where subject_id=:subjectId")
-    List<StudentSubjectRegistration> findAllBySubjectId(@Param("subjectId") Long subjectId);
+    @Query("select s from StudentSubjectRegistration s where s.id.subjectId = ?1")
+    List<StudentSubjectRegistration> findAllBySubjectId(Long subjectId);
 
-    @Query("from StudentSubjectRegistration where student_user_id=:studentUserId")
-    List<StudentSubjectRegistration> findAllByStudentUserId(@Param("studentUserId") Long studentUserId);
+    @Query("select s from StudentSubjectRegistration s where s.id.studentUserId = ?1")
+    List<StudentSubjectRegistration> findAllByStudentUserId(Long studentUserId);
 }
