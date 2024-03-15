@@ -2,6 +2,7 @@ package com.practice.universitysystem.security;
 
 import com.practice.universitysystem.security.service.UserDetailsServiceImp;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,9 +30,12 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
 
-    public SecurityConfig(UserDetailsServiceImp userDetailsServiceImp, JwtFilter jwtFilter) {
+    private final Boolean swaggerEnabled;
+
+    public SecurityConfig(UserDetailsServiceImp userDetailsServiceImp, JwtFilter jwtFilter, @Value("#{new Boolean('${swagger_enabled}')}") Boolean swaggerEnabled) {
         this.userDetailsServiceImp = userDetailsServiceImp;
         this.jwtFilter = jwtFilter;
+        this.swaggerEnabled = swaggerEnabled;
     }
 
     @Bean
@@ -41,8 +45,12 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authzConfigurer -> {
             authzConfigurer.requestMatchers("/auth/**").permitAll()
                     .requestMatchers("/curriculum/**").permitAll()
-                    .requestMatchers("/subject/**").permitAll()
-                    .requestMatchers("/**").authenticated();
+                    .requestMatchers("/subject/**").permitAll();
+            if (swaggerEnabled) {
+                authzConfigurer.requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/**").permitAll();
+            }
+            authzConfigurer.requestMatchers("/**").authenticated();
         });
         http.exceptionHandling(exceptionConfigurer -> exceptionConfigurer.authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UNAUTHORIZED")));
         http.sessionManagement(sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
