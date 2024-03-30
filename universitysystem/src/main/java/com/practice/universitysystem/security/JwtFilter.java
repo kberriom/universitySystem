@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,6 +18,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Component
 @Slf4j
@@ -22,11 +26,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsServiceImp userDetailsService;
     private final JwtUtil jwtUtil;
+    private final RequestMatcher requestMatcher;
 
     @Autowired
     public JwtFilter(UserDetailsServiceImp userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+        final ArrayList<RequestMatcher> requestMatcherIgnoredJWTList = new ArrayList<>();
+        requestMatcherIgnoredJWTList.add(new AntPathRequestMatcher("/auth/login"));
+        requestMatcher = new OrRequestMatcher(requestMatcherIgnoredJWTList);
     }
 
     @Override
@@ -61,5 +69,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return requestMatcher.matches(request);
     }
 }
