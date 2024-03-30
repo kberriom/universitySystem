@@ -57,7 +57,7 @@ public class AuthController {
     @GetMapping("/login")
     public Map<String, Object> login(@RequestBody LoginCredentialsDto credentials) {
         try {
-            return Collections.singletonMap("jwt-token", authService.authAndGenerateJwt(credentials.getEmail(), credentials.getPassword()));
+            return Collections.singletonMap("token", authService.authAndGenerateJwt(credentials.getEmail(), credentials.getPassword()));
 
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid credentials");
