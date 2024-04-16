@@ -350,7 +350,7 @@ class GradeControllerTest {
         String requestLoginJson=ow.writeValueAsString(credentials);
         log.info(requestLoginJson);
 
-        MvcResult resultStudentJWT = this.mockMvc.perform(get("/auth/login")
+        MvcResult resultStudentJWT = this.mockMvc.perform(post("/auth/login")
                         .contentType(APPLICATION_JSON)
                         .content(requestLoginJson))
                 .andExpect(status().is2xxSuccessful()).andReturn();

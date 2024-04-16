@@ -124,7 +124,7 @@ class AuthControllerTest {
 
         log.info(requestLoginJson);
 
-        this.mockMvc.perform(get("/auth/login")
+        this.mockMvc.perform(post("/auth/login")
                         .contentType(APPLICATION_JSON)
                         .content(requestLoginJson))
                 .andExpect(status().is2xxSuccessful());
@@ -161,7 +161,7 @@ class AuthControllerTest {
 
         log.info(requestLoginJson);
 
-        MvcResult result = this.mockMvc.perform(get("/auth/login")
+        MvcResult result = this.mockMvc.perform(post("/auth/login")
                         .contentType(APPLICATION_JSON)
                         .content(requestLoginJson))
                 .andExpect(status().is2xxSuccessful()).andReturn();

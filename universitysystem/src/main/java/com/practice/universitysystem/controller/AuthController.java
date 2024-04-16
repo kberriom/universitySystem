@@ -54,7 +54,7 @@ public class AuthController {
         return new ResponseEntity<>(teacher, HttpStatus.CREATED);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Map<String, Object> login(@RequestBody LoginCredentialsDto credentials) {
         try {
             return Collections.singletonMap("token", authService.authAndGenerateJwt(credentials.getEmail(), credentials.getPassword()));

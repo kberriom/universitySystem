@@ -66,7 +66,7 @@ class TeacherControllerTest {
     String getTeacherJWT(LoginCredentialsDto loginCredentials) throws Exception {
         String requestLoginJson=ow.writeValueAsString(loginCredentials);
         log.info(requestLoginJson);
-        MvcResult resultJWT = this.mockMvc.perform(get("/auth/login")
+        MvcResult resultJWT = this.mockMvc.perform(post("/auth/login")
                         .contentType(APPLICATION_JSON)
                         .content(requestLoginJson))
                 .andExpect(status().is2xxSuccessful()).andReturn();
