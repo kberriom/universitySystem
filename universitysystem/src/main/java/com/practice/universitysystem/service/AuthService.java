@@ -3,6 +3,7 @@ package com.practice.universitysystem.service;
 import com.practice.universitysystem.model.users.UniversityUser;
 import com.practice.universitysystem.repository.users.UniversityUserRepository;
 import com.practice.universitysystem.security.JwtUtil;
+import com.practice.universitysystem.security.service.UserRoleSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,8 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UniversityUserRepository universityUserRepository;
+    @Autowired
+    private UserRoleSelector userRoleSelector;
 
     public String getAuthUserEmail() {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -34,7 +37,9 @@ public class AuthService {
      */
     public String authAndGenerateJwt(String email, String password) throws AuthenticationException {
         usernamePasswordAuthentication(email, password);
-        return jwtUtil.generateToken(email);
+        //Role is only used to communicate the intended role of the user to the UI
+        String role = userRoleSelector.getUserRoleByHierarchy(email);
+        return jwtUtil.generateToken(email, role);
     }
 
     /**

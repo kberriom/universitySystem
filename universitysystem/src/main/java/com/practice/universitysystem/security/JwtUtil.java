@@ -18,11 +18,12 @@ public class JwtUtil {
 
     private static final long JWT_VALIDITY = 10L * 60L * 1000L;
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         final long now = System.currentTimeMillis();
         return JWT.create()
                 .withSubject("USER DETAILS")
                 .withClaim("email", email)
+                .withClaim("role", role)
                 .withIssuedAt(new Date())
                 .withIssuer("UNIVERSITY_SYSTEM")
                 .withIssuedAt(new Date())
@@ -38,5 +39,4 @@ public class JwtUtil {
         DecodedJWT jwt = verifier.verify(token);
         return jwt.getClaim("email").asString();
     }
-
 }
