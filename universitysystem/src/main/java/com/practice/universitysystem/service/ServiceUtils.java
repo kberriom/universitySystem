@@ -41,7 +41,7 @@ public class ServiceUtils<T, I, R extends JpaRepository<T, I>> {
         int responseSize = thingList.size();
         List<Object> responseList = new ArrayList<>(responseSize +1);
 
-        PageInfoDto pageInfo = new PageInfoDto(page+1L, responseSize, maxPageNumberGiven(size));
+        PageInfoDto pageInfo = new PageInfoDto(page+1L, responseSize, maxPageNumberGiven(size), thingRepository.count());
 
         responseList.add(pageInfo);
         responseList.addAll(thingList);

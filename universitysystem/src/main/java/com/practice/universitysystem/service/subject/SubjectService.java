@@ -63,8 +63,21 @@ public class SubjectService {
                 orElseThrow(()->new NoSuchElementException("Unable to find a Subject with name: " + name));
     }
 
+    public Subject getSubject(long id) {
+        return subjectRepository.findById(id).
+                orElseThrow(()->new NoSuchElementException("Unable to find a Subject with id: " + id));
+    }
+
     public List<Subject> getAllSubjects() {
         return subjectRepository.findAll();
+    }
+
+    public List<Subject> getAllSubjectsByTeacherId(Long teacherId) {
+        return subjectRepository.findAllSubjectsByTeacherId(teacherId);
+    }
+
+    public List<Subject> getAllSubjectsByStudentId(Long studentId) {
+        return subjectRepository.findAllByStudentId(studentId);
     }
 
     public List<Object> getPaginatedSubjects(int page, int pageSize) {

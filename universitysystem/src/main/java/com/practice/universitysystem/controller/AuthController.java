@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -74,6 +75,18 @@ public class AuthController {
 
             return Collections.singletonMap("jwt-token", token);
 
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid credentials");
+        }
+    }
+
+    @PostMapping("/adminUpdatePassword")
+    @Secured("ROLE_ADMIN")
+    @ResponseStatus(HttpStatus.OK)
+    @Transactional(rollbackFor = Exception.class)
+    public void adminUpdatePassword(@RequestBody NewPasswordDto credentials) {
+        try {
+            authService.changePassword(credentials.getEmail(), credentials.getNewPassword());
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid credentials");
         }

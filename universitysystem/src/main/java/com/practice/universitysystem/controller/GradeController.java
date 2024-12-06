@@ -46,6 +46,13 @@ public class GradeController {
         return gradeService.setStudentFinalGrade(subjectId, studentId, finalGrade);
     }
 
+    @DeleteMapping("/deleteStudentFinalGrade")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
+    public void deleteStudentFinalGrade(@RequestParam Long subjectId,@RequestParam Long studentId) {
+        gradeService.setStudentFinalGrade(subjectId, studentId, null);
+    }
+
     @PutMapping("/setStudentFinalGradeAuto")
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
@@ -67,6 +74,13 @@ public class GradeController {
     public StudentSubjectRegistration modifyStudentGrade(
             @RequestParam Long subjectId, @RequestParam Long studentId,@RequestParam Long gradeId,@RequestBody GradeDto gradeDto) {
         return gradeService.modifyStudentGrade(subjectId, studentId, gradeId , gradeDto);
+    }
+
+    @GetMapping("/getStudentSubjectRegistration")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
+    public StudentSubjectRegistration getStudentSubjectRegistration(@RequestParam Long subjectId, @RequestParam Long studentId) {
+        return gradeService.getStudentSubjectRegistration(subjectId, studentId);
     }
 
     @DeleteMapping("/removeStudentGrade")

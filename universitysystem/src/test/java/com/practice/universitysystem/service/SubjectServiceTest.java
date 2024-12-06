@@ -100,6 +100,15 @@ class SubjectServiceTest {
     }
 
     @Test
+    void getSubjectByIdTest() {
+        Subject subject = mock(Subject.class);
+
+        when(subjectRepository.findById(subject.getId())).thenReturn(Optional.of(subject));
+
+        assertThat(subjectService.getSubject(subject.getId()), is(subject));
+    }
+
+    @Test
     void getAllSubjectTest() {
         List<Subject> subjects = new ArrayList<>();
         subjects.add(mock(Subject.class));

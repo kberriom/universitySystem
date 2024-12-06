@@ -97,7 +97,7 @@ public class GradeService {
         return registrationRepository.save(subjectRegistration);
     }
 
-    private StudentSubjectRegistration getStudentSubjectRegistration(Long subjectId, Long studentId) {
+    public StudentSubjectRegistration getStudentSubjectRegistration(Long subjectId, Long studentId) {
         StudentSubjectRegistrationId registrationId = new StudentSubjectRegistrationId();
         registrationId.setSubjectId(subjectId);
         registrationId.setStudentUserId(studentId);

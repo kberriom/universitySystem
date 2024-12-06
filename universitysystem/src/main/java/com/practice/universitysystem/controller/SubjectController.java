@@ -42,10 +42,30 @@ public class SubjectController {
         return subjectService.getSubject(name);
     }
 
+    @GetMapping("/getSubjectById")
+    @ResponseStatus(HttpStatus.OK)
+    public Subject getSubjectById(@RequestParam long id) {
+        return subjectService.getSubject(id);
+    }
+
     @GetMapping("/getAllSubjects")
     @ResponseStatus(HttpStatus.OK)
     public List<Subject> getAllSubjects() {
         return subjectService.getAllSubjects();
+    }
+
+    @GetMapping("/getAllSubjectsByTeacherId")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
+    public List<Subject> getAllSubjectsByTeacherId(@RequestParam Long teacherId) {
+        return subjectService.getAllSubjectsByTeacherId(teacherId);
+    }
+
+    @GetMapping("/getAllSubjectsForStudent")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public List<Subject> getAllSubjectsForStudent(@RequestParam Long studentId) {
+        return subjectService.getAllSubjectsByStudentId(studentId);
     }
 
     @GetMapping("/getAllSubjects/paged")

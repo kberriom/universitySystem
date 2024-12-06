@@ -12,4 +12,6 @@ public class PageInfoDto {
     long currentPageSize;
 
     long maxPages;
+
+    long maxItems;
 }
