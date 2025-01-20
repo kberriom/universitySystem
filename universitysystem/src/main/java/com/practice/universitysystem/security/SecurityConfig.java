@@ -48,7 +48,8 @@ public class SecurityConfig {
                     .requestMatchers("/subject/**").permitAll();
             if (swaggerEnabled) {
                 authzConfigurer.requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/**").permitAll();
+                        .requestMatchers("/v3/**").permitAll()
+                        .requestMatchers("/graphiql/**").permitAll();
             }
             authzConfigurer.requestMatchers("/**").authenticated();
         });

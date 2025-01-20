@@ -1,0 +1,63 @@
+type Subject {
+    id: ID!
+    name: String!
+    description: String!
+    startDate: String!
+    endDate: String!
+    remote: Boolean
+    onSite: Boolean
+    roomLocation: String
+    creditsValue: Int!
+}
+
+input SubjectDto {
+    name: String
+    description: String
+    startDate: String
+    endDate: String
+    remote: Boolean
+    onSite: Boolean
+    roomLocation: String
+    creditsValue: Int
+}
+
+type Curriculum {
+    id: ID!
+    name: String!
+    description: String!
+    dateStart: String!
+    dateEnd: String!
+    subjects: [Subject]
+}
+
+input CurriculumDto {
+    name: String
+    description: String
+    dateStart: String
+    dateEnd: String
+}
+
+type PageInfoDto {
+    currentPage: Int!
+    currentPageSize: Int!
+    maxPages: Int!
+    maxItems: Int!
+}
+
+union PaginatedCurriculum = PageInfoDto | Curriculum
+union FullCurriculumData = Curriculum | Subject
+
+type Query {
+    curriculum(name: String!): Curriculum
+    curriculums: [Curriculum]
+    curriculumsPaged(page: Int, size: Int): [PaginatedCurriculum]
+    subjectsInCurriculum(curriculumName: String): [Subject]
+}
+
+type Mutation {
+    createCurriculum(curriculumDto: CurriculumDto): Curriculum
+    deleteCurriculum(name: String): ID
+    updateCurriculum(name: String, curriculumDto: CurriculumDto): Curriculum
+    addSubjectToCurriculum(curriculumName: String, subjectName: String): [FullCurriculumData]
+    removeSubjectFromCurriculum(curriculumName: String, subjectName: String): ID
+}
